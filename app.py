@@ -54,6 +54,11 @@ def article_detail(slug):
                            meta_desc=f"{article['description']}",
                            meta_keys=f"SEO, {article['title']}, 2026 SEO guide")
 
+# Health Check Endpoint for UptimeRobot (Keeps Render Free Tier awake)
+@app.route('/ping')
+def ping():
+    return "OK", 200
+
 @app.route('/privacy-policy')
 def privacy_policy():
     return render_template('privacy.html', meta_title="Privacy Policy | SEO Auditor Pro")
