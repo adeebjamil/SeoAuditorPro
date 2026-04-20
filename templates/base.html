@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Primary Meta Tags -->
+    <title>{% if meta_title %}{{ meta_title }}{% else %}SEO Auditor Pro | Free AI-Powered Technical SEO Audit{% endif %}</title>
+    <meta name="title" content="{% if meta_title %}{{ meta_title }}{% else %}SEO Auditor Pro | Free AI-Powered Technical SEO Audit{% endif %}">
+    <meta name="description" content="{% if meta_desc %}{{ meta_desc }}{% else %}Deep-crawl your website for technical metrics, broken links, page speed, and instantly get copy-paste AI-generated HTML code fixes to rank higher.{% endif %}">
+    <meta name="keywords" content="{% if meta_keys %}{{ meta_keys }}{% else %}SEO audit, technical SEO, AI SEO fixes, broken link checker, TTFB scanner, SEO software, SEO Auditor Pro, free website analyzer{% endif %}">
+    <meta name="author" content="Adeeb Jamil">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://seoauditorpro.tools{{ request.path }}">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://seoauditorpro.tools{{ request.path }}">
+    <meta property="og:title" content="{% if meta_title %}{{ meta_title }}{% else %}SEO Auditor Pro | Free AI-Powered Technical SEO Audit{% endif %}">
+    <meta property="og:description" content="{% if meta_desc %}{{ meta_desc }}{% else %}Deep-crawl your website and instantly get copy-paste AI-generated HTML code fixes to rank higher.{% endif %}">
+    <!-- Note: You'll want to add a nice logo/screenshot as og-image.jpg in your static folder -->
+    <meta property="og:image" content="https://seoauditorpro.tools/static/og-image.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://seoauditorpro.tools{{ request.path }}">
+    <meta property="twitter:title" content="{% if meta_title %}{{ meta_title }}{% else %}SEO Auditor Pro | Free AI-Powered Technical SEO Audit{% endif %}">
+    <meta property="twitter:description" content="{% if meta_desc %}{{ meta_desc }}{% else %}Deep-crawl your website and instantly get copy-paste AI-generated HTML code fixes to rank higher.{% endif %}">
+    <meta property="twitter:image" content="https://seoauditorpro.tools/static/og-image.jpg">
+
+    <!-- JSON-LD Schema.org Markup (Helps Google understand what your product is) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "SEO Auditor Pro",
+      "operatingSystem": "Web App",
+      "applicationCategory": "DeveloperApplication",
+      "author": {
+        "@type": "Person",
+        "name": "Adeeb Jamil"
+      },
+      "url": "https://seoauditorpro.tools/",
+      "offers": {
+        "@type": "Offer",
+        "price": "0.00",
+        "priceCurrency": "USD"
+      },
+      "description": "Lightning fast SEO intelligence, AI-generated code fixes, and technical site audits."
+    }
+    </script>
+
+    <!-- App Icons -->
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        /* Navbar Styling */
+        .navbar {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .navbar-brand {
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        
+        /* Card & UI Polish */
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.05) !important;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .card-header {
+            background-color: transparent;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            font-weight: 600;
+            padding: 1.25rem 1.5rem;
+        }
+        .card-body {
+            padding: 1.5rem;
+        }
+        
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(135deg, #0d6efd 0%, #0b5ed7 100%);
+            border: none;
+            box-shadow: 0 4px 10px rgba(13, 110, 253, 0.3);
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 14px rgba(13, 110, 253, 0.4);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            border: none;
+            font-weight: 600;
+        }
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+        }
+
+        /* Inputs */
+        .form-control {
+            border-radius: 8px;
+            padding: 0.75rem 1.25rem;
+            border: 1px solid #ced4da;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);
+            font-size: 1rem;
+        }
+        .form-control:focus {
+            box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.15);
+            border-color: #86b7fe;
+        }
+
+        /* Main Container setup for sticky footer */
+        .main-content {
+            flex: 1;
+        }
+
+        /* Custom Footer */
+        .site-footer {
+            background-color: #fff;
+            border-top: 1px solid rgba(0,0,0,0.08);
+            margin-top: 5rem;
+            padding: 1.5rem 0;
+        }
+        .site-footer p {
+            margin: 0;
+            color: #6c757d;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+        
+        .creator-highlight {
+            color: #0d6efd;
+            font-weight: 700;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark mb-5">
+        <div class="container d-flex justify-content-center justify-content-lg-start">
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <i class="fa-solid fa-rocket text-primary me-2"></i> SEO Auditor Pro
+            </a>
+        </div>
+    </nav>
+    
+    <main class="container main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer text-center">
+        <div class="container">
+            <p>
+                <i class="fa-solid fa-code text-secondary me-1"></i> Developed & Designed by <span class="creator-highlight">Adeeb Jamil</span> — The Creator of this Website
+            </p>
+            
+            <!-- High Quality Outbound Links for cross-pollination -->
+            <div class="d-flex justify-content-center gap-4 mt-3" style="font-size: 0.85rem;">
+                <a href="https://tools-vault.app/" target="_blank" rel="noopener" class="text-decoration-none text-muted fw-medium hover-lift"><i class="fa-solid fa-toolbox me-1"></i> Tools Vault</a>
+                <a href="https://frontend-camp-eight.vercel.app/" target="_blank" rel="noopener" class="text-decoration-none text-muted fw-medium hover-lift"><i class="fa-solid fa-bullhorn me-1"></i> AI Omni Campaigner</a>
+                <a href="https://www.tempinbox.me/" target="_blank" rel="noopener" class="text-decoration-none text-muted fw-medium hover-lift"><i class="fa-solid fa-envelope me-1"></i> Temp Mail</a>
+                <a href="https://www.profitablecpmratenetwork.com/hc54w1hqz7?key=b385983d9a97a3fcdebfc2cddd3928da" target="_blank" rel="noopener" class="text-decoration-none text-success fw-medium hover-lift"><i class="fa-solid fa-star me-1"></i> Partner Tools</a>
+            </div>
+
+            <!-- Legal Pages -->
+            <div class="d-flex justify-content-center gap-3 mt-3 mb-2" style="font-size: 0.8rem;">
+                <a href="/privacy-policy" class="text-muted text-decoration-none hover-lift">Privacy Policy</a>
+                <span class="text-muted opacity-50">|</span>
+                <a href="/terms-of-service" class="text-muted text-decoration-none hover-lift">Terms of Service</a>
+            </div>
+
+            <!-- Banner 728x90 Ad -->
+            <div class="mt-4 mb-2 d-flex justify-content-center">
+                <script>
+                  atOptions = {
+                    'key' : 'f7afe9b0f7d7cd36bd1d4feaf5f7fbc3',
+                    'format' : 'iframe',
+                    'height' : 90,
+                    'width' : 728,
+                    'params' : {}
+                  };
+                </script>
+                <script src="https://www.highperformanceformat.com/f7afe9b0f7d7cd36bd1d4feaf5f7fbc3/invoke.js"></script>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Ad Scripts (Popunder and Social Bar) -->
+    <script async src="https://pl29201095.profitablecpmratenetwork.com/ed/69/bd/ed69bd64fbc4113dff84d1b34878a689.js"></script>
+    <script async src="https://pl29201098.profitablecpmratenetwork.com/f0/d4/06/f0d4069be0b0f00cdfe96b52434fe0ad.js"></script>
+</body>
+</html>

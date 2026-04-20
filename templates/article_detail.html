@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% set meta_title = article.title + " | SEO Auditor Pro Guide" %}
+{% set meta_desc = article.description %}
+{% set meta_keys = "seo article, " + article.title.lower().split(' ')[-2:] | join(', ') %}
+
+{% block content %}
+<div class="row pt-5 justify-content-center">
+    <!-- Ad space Left -->
+    <div class="col-lg-2 d-none d-lg-block text-end">
+        <div style="position: sticky; top: 100px;">
+            <script async="async" data-cfasync="false" src="https://pl29201096.profitablecpmratenetwork.com/fcfdfd2035684df0306388358dd0e824/invoke.js"></script>
+            <div id="container-fcfdfd2035684df0306388358dd0e824"></div>
+        </div>
+    </div>
+
+    <!-- Article Body -->
+    <div class="col-lg-8" style="background-color: #fff; padding: 3rem; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.05);">
+        
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb" style="font-size: 0.9rem; font-weight: 500;">
+                <li class="breadcrumb-item"><a href="/" class="text-decoration-none"><i class="fa-solid fa-home"></i> Home</a></li>
+                <li class="breadcrumb-item"><a href="/articles" class="text-decoration-none">Articles</a></li>
+                <li class="breadcrumb-item active text-truncate" aria-current="page" style="max-width: 250px;">{{ article.title }}</li>
+            </ol>
+        </nav>
+
+        <hr class="mb-4">
+
+        <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill fw-bold mb-3">SEO Guide #{{ article.id }}</span>
+        <h1 class="display-4 fw-bolder mb-3 text-dark" style="letter-spacing: -1px;">{{ article.title }}</h1>
+        <p class="lead text-muted border-start border-4 border-primary ps-3" style="font-size: 1.15rem;">
+            {{ article.description }}
+        </p>
+
+        <!-- Dynamic Content injected safely -->
+        <div class="mt-5 article-body" style="font-size: 1.05rem; line-height: 1.8; color: #4a5568;">
+            {{ article.content | safe }}
+        </div>
+        
+        <div class="mt-5 d-flex justify-content-between p-4 bg-light rounded-4 align-items-center">
+            <div>
+                <h5 class="fw-bold mb-1">Want to check your own site?</h5>
+                <p class="text-muted mb-0 small">Run a high-speed SEO audit instantly.</p>
+            </div>
+            <a href="/" class="btn btn-primary rounded-pill px-4 shadow hover-lift fw-bold">Test My Site</a>
+        </div>
+    </div>
+    
+    <!-- Ad space Right -->
+    <div class="col-lg-2 d-none d-lg-block text-start">
+        <div style="position: sticky; top: 100px;">
+            <script>
+                atOptions = {
+                    'key' : 'c95d5c6bacb6f4302a99c78f03a8bbb6',
+                    'format' : 'iframe',
+                    'height' : 250,
+                    'width' : 300,
+                    'params' : {}
+                };
+            </script>
+            <script src="https://www.highperformanceformat.com/c95d5c6bacb6f4302a99c78f03a8bbb6/invoke.js"></script>
+        </div>
+    </div>
+</div>
+{% endblock %}

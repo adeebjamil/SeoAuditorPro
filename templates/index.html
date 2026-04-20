@@ -1,0 +1,476 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row align-items-center" style="min-height: 60vh;">
+    <!-- Left Column: Intro & Form -->
+    <div class="col-lg-7 text-center text-lg-start mb-5 mb-lg-0 pe-lg-5">
+        <div class="mb-4">
+            <span class="badge bg-primary bg-opacity-10 text-primary mb-3 px-3 py-2 rounded-pill fw-bold" style="font-size: 0.85rem; letter-spacing: 0.5px;">
+                <i class="fa-solid fa-bolt me-1"></i> LIGHTNING FAST SEO INTELLIGENCE
+            </span>
+            <h1 class="display-4 fw-bolder mb-3" style="letter-spacing: -1px; color:#1e293b;">Analyze Your Website's SEO</h1>
+            <p class="lead text-muted mx-auto mx-lg-0 mb-4" style="max-width: 600px;">
+                Deep-crawl your homepage for technical metrics, meta tag structure, page speed performance, and actionable AI fixes out of 100 points.
+            </p>
+            
+            <a href="/articles" class="btn btn-outline-primary btn-lg rounded-pill fw-bold hover-lift shadow-sm d-inline-flex align-items-center px-4 py-2 border-2" style="font-size: 1.05rem;">
+                <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3 shadow-sm" style="width: 32px; height: 32px;">
+                    <i class="fa-solid fa-book-open" style="font-size: 0.8rem;"></i>
+                </div>
+                <span>Free SEO Guides</span>
+                <i class="fa-solid fa-arrow-right-long ms-3 opacity-75"></i>
+            </a>
+        </div>
+        
+        <div class="card shadow-lg p-4 p-md-5 mx-auto mx-lg-0" style="max-width: 750px; border-radius: 16px;">
+            <form action="/analyze" method="POST" id="audit-form">
+                <div class="input-group input-group-lg mb-3 shadow-sm rounded-3">
+                    <span class="input-group-text bg-white border-end-0 text-muted" style="border-top-left-radius: 8px; border-bottom-left-radius: 8px;">
+                        <i class="fa-solid fa-globe"></i>
+                    </span>
+                    <input type="text" class="form-control border-start-0 ps-0" name="url" placeholder="https://example.com" required style="font-weight: 500;">
+                    <button class="btn btn-primary px-4 fw-bold" type="submit" id="run-btn" style="border-top-right-radius: 8px; border-bottom-right-radius: 8px;">
+                        <i class="fa-solid fa-magnifying-glass me-2"></i>Run Free Audit
+                    </button>
+                </div>
+
+                <div class="text-muted d-flex flex-wrap justify-content-center justify-content-lg-start gap-3 mt-3" style="font-size: 0.85rem; font-weight: 500;">
+                    <span><i class="fa-solid fa-check text-success me-1"></i> No Credit Card Required</span>
+                    <span><i class="fa-solid fa-shield-halved text-success me-1"></i> HTTPS Secure Scan</span>
+                </div>
+                
+                <!-- Animated Loader (Hidden by default) -->
+                <div id="loader-section" class="d-none mt-4 text-center text-lg-start">
+                    <h5 class="mb-3 text-primary fw-bold" id="loading-stage">Initializing Scraper... <span id="progress-percent">0%</span></h5>
+                    <div class="progress shadow-sm" style="height: 25px; border-radius: 20px;">
+                        <div id="progress-bar" class="progress-bar progress-bar-striped progress-bar-animated bg-primary" role="progressbar" style="width: 0%; transition: width 0.4s ease;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Right Column: 3D SEO Component -->
+    <div class="col-lg-5 d-none d-lg-flex justify-content-center align-items-center" style="position: relative; z-index: 10; margin-top: 60px;">
+        <!-- 3D CSS Rotating SEO Cube -->
+        <div style="width: 250px; height: 250px; perspective: 1200px; position: relative;">
+            
+            <!-- 3D Clouds Floating Above -->
+            <div class="css-cloud cloud-left"></div>
+            <div class="css-cloud"></div>
+            <div class="css-cloud cloud-right"></div>
+
+            <div style="width: 100%; height: 100%; position: relative; z-index: 10; transform-style: preserve-3d; animation: spinCube 16s infinite linear;">
+                
+                <!-- Front Face: 100/100 Score -->
+                <div class="d-flex flex-column align-items-center justify-content-center shadow-lg" style="position: absolute; width: 250px; height: 250px; background: rgba(255,255,255,0.95); border: 2px solid rgba(13, 110, 253, 0.4); transform: rotateY(0deg) translateZ(125px); border-radius: 20px; backdrop-filter: blur(10px);">
+                    <div class="rounded-circle border border-5 border-success d-flex align-items-center justify-content-center mb-3 shadow-sm bg-success bg-opacity-10" style="width: 110px; height: 110px;">
+                        <h2 class="text-success fw-bolder mb-0" style="font-size: 2.5rem;">100</h2>
+                    </div>
+                    <span class="badge bg-primary fs-6 py-2 px-3 rounded-pill shadow-sm"><i class="fa-solid fa-trophy me-1"></i> SEO Master</span>
+                </div>
+                
+                <!-- Back Face: Server TTFB -->
+                <div class="d-flex flex-column align-items-center justify-content-center shadow-lg" style="position: absolute; width: 250px; height: 250px; background: rgba(255,255,255,0.95); border: 2px solid rgba(13, 110, 253, 0.4); transform: rotateY(180deg) translateZ(125px); border-radius: 20px; backdrop-filter: blur(10px);">
+                    <i class="fa-solid fa-server input-group-text bg-transparent border-0 fa-4x text-primary mb-3" style="filter: drop-shadow(0px 10px 10px rgba(0,0,0,0.1));"></i>
+                    <span class="badge bg-dark fs-6 py-2 px-3 rounded-pill shadow-sm"><i class="fa-solid fa-bolt text-warning me-1"></i> Ultra Fast TTFB</span>
+                </div>
+                
+                <!-- Left Face: Deep Crawl -->
+                <div class="d-flex flex-column align-items-center justify-content-center shadow-lg" style="position: absolute; width: 250px; height: 250px; background: rgba(255,255,255,0.95); border: 2px solid rgba(13, 110, 253, 0.4); transform: rotateY(-90deg) translateZ(125px); border-radius: 20px; backdrop-filter: blur(10px);">
+                    <i class="fa-solid fa-spider fa-4x text-danger mb-3" style="filter: drop-shadow(0px 10px 10px rgba(0,0,0,0.1));"></i>
+                    <span class="badge bg-danger fs-6 py-2 px-3 rounded-pill shadow-sm"><i class="fa-solid fa-bug me-1"></i> Crawler Setup</span>
+                </div>
+                
+                <!-- Right Face: Code Quality -->
+                <div class="d-flex flex-column align-items-center justify-content-center shadow-lg" style="position: absolute; width: 250px; height: 250px; background: rgba(255,255,255,0.95); border: 2px solid rgba(13, 110, 253, 0.4); transform: rotateY(90deg) translateZ(125px); border-radius: 20px; backdrop-filter: blur(10px);">
+                    <i class="fa-solid fa-code fa-4x text-success mb-3" style="filter: drop-shadow(0px 10px 10px rgba(0,0,0,0.1));"></i>
+                    <span class="badge bg-success fs-6 py-2 px-3 rounded-pill shadow-sm"><i class="fa-solid fa-file-code me-1"></i> Clean Schema</span>
+                </div>
+                
+                <!-- Top Face is OPEN -->
+                
+                <!-- SEO Balls Dropping Inside -->
+                <div class="seo-ball" style="--d: 0s; --x: 40px; --z: 30px;">
+                    <div class="ball-face ball-front bg-primary">SEO</div><div class="ball-face ball-back bg-primary">SEO</div>
+                </div>
+                <div class="seo-ball" style="--d: 2.5s; --x: -50px; --z: -20px;">
+                    <div class="ball-face ball-front bg-success">SEO</div><div class="ball-face ball-back bg-success">SEO</div>
+                </div>
+                <div class="seo-ball" style="--d: 5s; --x: 20px; --z: -60px;">
+                    <div class="ball-face ball-front bg-danger">SEO</div><div class="ball-face ball-back bg-danger">SEO</div>
+                </div>
+                <div class="seo-ball" style="--d: 7.5s; --x: -30px; --z: 50px;">
+                    <div class="ball-face ball-front bg-warning text-dark">SEO</div><div class="ball-face ball-back bg-warning text-dark">SEO</div>
+                </div>
+                <div class="seo-ball" style="--d: 10s; --x: 10px; --z: 0px;">
+                    <div class="ball-face ball-front" style="background: #8b5cf6;">SEO</div><div class="ball-face ball-back" style="background: #8b5cf6;">SEO</div>
+                </div>
+                
+                <!-- Bottom Face with drop shadow reflection -->
+                <div class="shadow-lg" style="position: absolute; width: 250px; height: 250px; background: rgba(13, 110, 253, 0.05); border: 2px solid rgba(13, 110, 253, 0.2); transform: rotateX(-90deg) translateZ(125px); border-radius: 20px; box-shadow: 0px 50px 100px rgba(13,110,253,0.3);"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .css-cloud {
+        position: absolute;
+        top: -160px;
+        left: 50%;
+        margin-left: -100px;
+        width: 200px;
+        height: 70px;
+        background: #eaf4fc;
+        border-radius: 50px;
+        box-shadow: 0 20px 40px rgba(13,110,253,0.08), inset 0 -10px 20px rgba(13,110,253,0.15);
+        animation: floatCloud 4s ease-in-out infinite;
+        z-index: 20;
+    }
+    .css-cloud::before, .css-cloud::after {
+        content: '';
+        position: absolute;
+        background: #eaf4fc;
+        border-radius: 50%;
+    }
+    .css-cloud::before {
+        width: 90px;
+        height: 90px;
+        top: -45px;
+        left: 30px;
+        box-shadow: inset 0 5px 15px rgba(255,255,255,0.5);
+    }
+    .css-cloud::after {
+        width: 110px;
+        height: 110px;
+        top: -65px;
+        right: 25px;
+        box-shadow: inset 0 5px 15px rgba(255,255,255,0.5);
+    }
+    
+    .cloud-left {
+        margin-left: -240px;
+        top: -110px;
+        transform: scale(0.5);
+        opacity: 0.8;
+        animation: floatCloudLeft 4.5s ease-in-out infinite;
+    }
+    .cloud-right {
+        margin-left: 60px;
+        top: -140px;
+        transform: scale(0.65);
+        opacity: 0.85;
+        animation: floatCloudRight 5s ease-in-out infinite;
+    }
+
+    @keyframes floatCloudLeft {
+        0%, 100% { transform: scale(0.5) translateY(0); }
+        50% { transform: scale(0.5) translateY(-15px); }
+    }
+    @keyframes floatCloudRight {
+        0%, 100% { transform: scale(0.65) translateY(0); }
+        50% { transform: scale(0.65) translateY(-18px); }
+    }
+
+    @keyframes floatCloud {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-20px); }
+    }
+
+    @keyframes spinCube {
+        0% { transform: rotateX(-15deg) rotateY(0deg); }
+        100% { transform: rotateX(-15deg) rotateY(360deg); }
+    }
+    
+    .hover-lift {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .hover-lift:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.08) !important;
+    }
+    
+    .seo-ball {
+        position: absolute;
+        width: 35px;
+        height: 35px;
+        top: 50%;
+        left: 50%;
+        margin-top: -17.5px;
+        margin-left: -17.5px;
+        transform-style: preserve-3d;
+        animation: dropBall 14s infinite linear;
+        animation-delay: var(--d);
+        opacity: 0;
+    }
+
+    .ball-face {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.65rem;
+        font-weight: 800;
+        color: white;
+        backface-visibility: hidden;
+        box-shadow: inset -5px -5px 10px rgba(0,0,0,0.2), 0 5px 15px rgba(0,0,0,0.3);
+    }
+    
+    .ball-front { transform: rotateY(0deg); }
+    .ball-back { transform: rotateY(180deg); }
+    .ball-face.text-dark { color: #212529 !important; }
+
+    @keyframes dropBall {
+        0% { transform: translate3d(var(--x), -250px, var(--z)) rotateY(0deg); opacity: 0; }
+        2% { opacity: 0; } /* Stay hidden while inside cloud */
+        4% { opacity: 1; } /* Fully visible out of the cloud */
+        25% { transform: translate3d(var(--x), 105px, var(--z)) rotateY(180deg); opacity: 1; } /* Slower fall */
+        35% { transform: translate3d(var(--x), 40px, var(--z)) rotateY(270deg); opacity: 1; } /* Big bounce up */
+        45% { transform: translate3d(var(--x), 105px, var(--z)) rotateY(360deg); opacity: 1; } /* Hit floor again */
+        53% { transform: translate3d(var(--x), 75px, var(--z)) rotateY(360deg); opacity: 1; } /* Med bounce */
+        61% { transform: translate3d(var(--x), 105px, var(--z)) rotateY(360deg); opacity: 1; } /* Hit floor */
+        66% { transform: translate3d(var(--x), 95px, var(--z)) rotateY(360deg); opacity: 1; } /* Tiny bounce */
+        70% { transform: translate3d(var(--x), 105px, var(--z)) rotateY(360deg); opacity: 1; } /* Final rest */
+        90% { transform: translate3d(var(--x), 105px, var(--z)) rotateY(360deg); opacity: 1; } /* Stay on floor */
+        95% { transform: translate3d(var(--x), 105px, var(--z)) rotateY(360deg); opacity: 0; } /* Fade out */
+        100% { transform: translate3d(var(--x), 105px, var(--z)) rotateY(360deg); opacity: 0; }
+    }
+</style>
+<div class="row justify-content-center align-items-center">
+    <div class="col-md-11 text-center">
+
+        <!-- Our Video & Marketing Content Section -->
+        <div class="mt-5 pt-4 pb-3" style="max-width: 900px; margin: 0 auto; text-align: left;">
+            <div class="row align-items-center bg-white shadow-sm rounded-4 p-4 p-md-5">
+                
+                <!-- Video Container -->
+                <div class="col-md-6 mb-4 mb-md-0">
+                    <div class="ratio ratio-16x9 shadow rounded-3 overflow-hidden" style="border: 2px solid #e2e8f0; background-color: #f1f5f9;">
+                        <!-- Using a local video tag. Make sure you place your promo video in the static folder and name it 'promo.mp4' -->
+                        <video controls autoplay muted loop style="width: 100%; height: 100%; object-fit: cover; background-color: #000;">
+                            <source src="{{ url_for('static', filename='video.mp4') }}" type="video/mp4">
+                            <div class="d-flex align-items-center justify-content-center h-100 w-100 flex-column text-muted p-4 text-center">
+                                <i class="fa-solid fa-video fa-2x mb-2 text-secondary"></i>
+                                <p class="mb-0 fw-semibold" style="font-size: 0.9rem;">Please place a video named <strong>promo.mp4</strong><br>inside your <strong>static</strong> folder.</p>
+                            </div>
+                        </video>
+                    </div>
+                </div>
+                
+                <!-- Marketing Copy -->
+                <div class="col-md-6 ps-md-4">
+                    <h3 class="fw-bolder mb-3" style="color: #0f172a;">Why use SEO Auditor Pro?</h3>
+                    <p class="text-muted mb-4" style="font-size: 0.95rem;">
+                        Don't pay expensive agencies just to tell you what's broken. Our cutting-edge engine crawls your website and gives you the exact blueprint to fix it.
+                    </p>
+                    
+                    <ul class="list-unstyled">
+                        <li class="mb-3 d-flex align-items-start">
+                            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3 flex-shrink-0" style="width: 28px; height: 28px; font-size: 0.8rem;">
+                                <i class="fa-solid fa-code"></i>
+                            </div>
+                            <div>
+                                <strong class="d-block" style="color: #1e293b;">AI-Generated Code Fixes</strong>
+                                <span class="text-muted" style="font-size: 0.85rem;">Instantly copy and paste our AI prompts to get fully written HTML fixes for your site.</span>
+                            </div>
+                        </li>
+                        <li class="mb-3 d-flex align-items-start">
+                            <div class="bg-danger text-white rounded-circle d-flex align-items-center justify-content-center me-3 flex-shrink-0" style="width: 28px; height: 28px; font-size: 0.8rem;">
+                                <i class="fa-solid fa-link-slash"></i>
+                            </div>
+                            <div>
+                                <strong class="d-block" style="color: #1e293b;">Deep Broken Link Scan (404s)</strong>
+                                <span class="text-muted" style="font-size: 0.85rem;">We scour your pages to find dead links before Google punishes your rankings.</span>
+                            </div>
+                        </li>
+                        <li class="mb-0 d-flex align-items-start">
+                            <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3 flex-shrink-0" style="width: 28px; height: 28px; font-size: 0.8rem;">
+                                <i class="fa-solid fa-file-pdf"></i>
+                            </div>
+                            <div>
+                                <strong class="d-block" style="color: #1e293b;">One-Click PDF Reports</strong>
+                                <span class="text-muted" style="font-size: 0.85rem;">Download beautiful, client-ready SEO reports perfect for pitching local businesses.</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Native Ad Banner 1 -->
+        <div class="mt-4 mb-4 pt-2 text-center w-100">
+            <script async="async" data-cfasync="false" src="https://pl29201096.profitablecpmratenetwork.com/fcfdfd2035684df0306388358dd0e824/invoke.js"></script>
+            <div id="container-fcfdfd2035684df0306388358dd0e824"></div>
+        </div>
+
+        <!-- How It Works Section -->
+        <div class="mt-5 pt-5 pb-4 border-top" style="max-width: 1000px; margin: 0 auto;">
+            <div class="text-center mb-5">
+                <span class="text-primary fw-bold text-uppercase tracking-wider small" style="letter-spacing: 1.5px;">SIMPLE PROCESS</span>
+                <h2 class="fw-bolder mt-2" style="color: #0f172a;">How SEO Auditor Pro Works</h2>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm rounded-4 text-center p-4 hover-lift">
+                        <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-inline-flex align-items-center justify-content-center mx-auto mb-3" style="width: 60px; height: 60px;">
+                            <i class="fa-solid fa-globe fa-xl"></i>
+                        </div>
+                        <h5 class="fw-bold mb-2">1. Enter Your URL</h5>
+                        <p class="text-muted small mb-0">Just paste your website link. No signup or credit card required to get your first baseline score.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm rounded-4 text-center p-4 hover-lift">
+                        <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-inline-flex align-items-center justify-content-center mx-auto mb-3" style="width: 60px; height: 60px;">
+                            <i class="fa-solid fa-spider fa-xl"></i>
+                        </div>
+                        <h5 class="fw-bold mb-2">2. AI Deep Crawler</h5>
+                        <p class="text-muted small mb-0">Our engine scans your HTML, meta tags, and tests server response times safely in seconds.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm rounded-4 text-center p-4 hover-lift">
+                        <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-inline-flex align-items-center justify-content-center mx-auto mb-3" style="width: 60px; height: 60px;">
+                            <i class="fa-solid fa-wand-magic-sparkles fa-xl"></i>
+                        </div>
+                        <h5 class="fw-bold mb-2">3. Get Actionable Fixes</h5>
+                        <p class="text-muted small mb-0">Receive a detailed score and copy-paste ready HTML fixes generated by our custom AI.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Metrics Grid Section -->
+        <div class="mt-5 pt-5 pb-5" style="max-width: 1000px; margin: 0 auto; text-align: left;">
+            <div class="text-center mb-5">
+                <h2 class="fw-bolder" style="color: #0f172a;">Everything we measure</h2>
+                <p class="text-muted">A comprehensive look under the hood of your website.</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="d-flex align-items-start p-4 rounded-4 bg-white shadow-sm border border-light hover-lift">
+                        <i class="fa-solid fa-bolt fa-2x text-warning me-3 mt-1"></i>
+                        <div>
+                            <h6 class="fw-bold mb-1">Performance & Speed</h6>
+                            <p class="text-muted small mb-0">TTFB (Time to First Byte), content load times, and heavy asset detection.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="d-flex align-items-start p-4 rounded-4 bg-white shadow-sm border border-light hover-lift">
+                        <i class="fa-solid fa-magnifying-glass-chart fa-2x text-primary me-3 mt-1"></i>
+                        <div>
+                            <h6 class="fw-bold mb-1">On-Page SEO</h6>
+                            <p class="text-muted small mb-0">Title tags, meta descriptions, image ALT text, and H1-H6 hierarchy checks.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="d-flex align-items-start p-4 rounded-4 bg-white shadow-sm border border-light hover-lift">
+                        <i class="fa-solid fa-link-slash fa-2x text-danger me-3 mt-1"></i>
+                        <div>
+                            <h6 class="fw-bold mb-1">Link Architecture</h6>
+                            <p class="text-muted small mb-0">Internal link distribution, broken 404 link scans, and external outbound link tracking.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="d-flex align-items-start p-4 rounded-4 bg-white shadow-sm border border-light hover-lift">
+                        <i class="fa-solid fa-robot fa-2x text-success me-3 mt-1"></i>
+                        <div>
+                            <h6 class="fw-bold mb-1">Technical Crawlability</h6>
+                            <p class="text-muted small mb-0">Robots.txt validation, XML Sitemap presence, and crawler directive analysis.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Banner 300x250 Ad -->
+        <div class="mt-2 mb-4 text-center">
+            <script>
+                atOptions = {
+                    'key' : 'c95d5c6bacb6f4302a99c78f03a8bbb6',
+                    'format' : 'iframe',
+                    'height' : 250,
+                    'width' : 300,
+                    'params' : {}
+                };
+            </script>
+            <script src="https://www.highperformanceformat.com/c95d5c6bacb6f4302a99c78f03a8bbb6/invoke.js"></script>
+        </div>
+
+        <!-- Bottom CTA -->
+        <div class="mt-4 mb-5 pt-4 pb-5 text-center">
+            <div class="bg-primary rounded-4 p-5 shadow-lg text-white mx-auto" style="max-width: 850px; position: relative; overflow: hidden;">
+                <!-- background pattern -->
+                <div class="position-absolute" style="top: -50%; left: -10%; width: 200px; height: 200px; background: rgba(255,255,255,0.1); filter: blur(40px); border-radius: 50%;"></div>
+                <div class="position-absolute" style="bottom: -50%; right: -10%; width: 250px; height: 250px; background: rgba(255,255,255,0.1); filter: blur(50px); border-radius: 50%;"></div>
+                
+                <div style="position: relative; z-index: 2;">
+                    <h2 class="fw-bolder mb-3 display-6">Ready to dominate search results?</h2>
+                    <p class="lead mb-4 opacity-75 mx-auto" style="max-width: 600px;">Stop guessing. Get your free, AI-powered codebase analysis and start ranking higher today.</p>
+                    <a href="#" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); document.querySelector('input[name=\'url\']').focus(); return false;" class="btn btn-light btn-lg px-5 py-3 rounded-pill fw-bold text-primary shadow">
+                        <i class="fa-solid fa-rocket me-2"></i> Audit My Site Now
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    document.getElementById('audit-form').addEventListener('submit', function(e) {
+        e.preventDefault(); // Stop instant submission
+        
+        // Disable button to prevent double-clicks
+        document.getElementById('run-btn').disabled = true;
+        
+        // Reveal Loader
+        document.getElementById('loader-section').classList.remove('d-none');
+        
+        let percent = 0;
+        const progressPercent = document.getElementById('progress-percent');
+        const progressBar = document.getElementById('progress-bar');
+        const loadingStage = document.getElementById('loading-stage');
+        const form = this;
+
+        const stages = [
+            "Initializing Scraper...",
+            "Downloading HTML Content...",
+            "Validating SSL & Viewports...",
+            "Pulling Word Counts & Links...",
+            "Concurrency Scanning 404s...",
+            "Generating AI Master Prompt...",
+            "Finalizing Score..."
+        ];
+
+        const loaderInterval = setInterval(() => {
+            // Speed up the loading bar to reach 100% in a few seconds
+            percent += Math.floor(Math.random() * 12) + 8; 
+
+            if (percent >= 100) {
+                percent = 100;
+                clearInterval(loaderInterval);
+                
+                progressBar.style.width = '100%';
+                loadingStage.innerHTML = `Audit Complete! Loading Report... <span id="progress-percent">100%</span>`;
+                
+                // Submit the form for real once it hits 100%
+                setTimeout(() => form.submit(), 300);
+            } else {
+                progressBar.style.width = percent + '%';
+                
+                const stageIndex = Math.min(Math.floor(percent / 15), stages.length - 1);
+                loadingStage.innerHTML = `${stages[stageIndex]} <span id="progress-percent">${percent}%</span>`;
+            }
+            
+        }, 350); // Tick faster
+    });
+</script>
+{% endblock %}

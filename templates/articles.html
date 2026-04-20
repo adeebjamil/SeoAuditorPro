@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row pt-4 pb-5">
+    <div class="col-md-12 mb-4 text-center">
+        <h1 class="display-5 fw-bolder" style="color: #0f172a;">SEO Articles & Guides</h1>
+        <p class="lead text-muted mx-auto" style="max-width: 600px;">
+            Dive into our library of over 350 actionable SEO articles. Learn everything from Core Web Vitals to advanced link building techniques.
+        </p>
+
+        <!-- Search Bar -->
+        <form action="/articles" method="GET" class="mt-4 mx-auto" style="max-width: 500px;">
+            <div class="input-group input-group-lg shadow-sm rounded-pill overflow-hidden" style="border: 2px solid #e2e8f0; background: white;">
+                <span class="input-group-text bg-white border-0 text-primary ps-4">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </span>
+                <input type="text" name="q" class="form-control border-0 shadow-none bg-white" placeholder="Search keywords like 'Backlink' or 'Speed'..." value="{{ search_query }}" style="font-weight: 500; font-size: 1rem;">
+                <button type="submit" class="btn btn-primary px-4 fw-bold border-0" style="border-radius: 0;">Search</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Ad Space -->
+    <div class="col-md-12 text-center mb-5">
+        <script>
+            atOptions = {
+                'key' : 'c95d5c6bacb6f4302a99c78f03a8bbb6',
+                'format' : 'iframe',
+                'height' : 250,
+                'width' : 300,
+                'params' : {}
+            };
+        </script>
+        <script src="https://www.highperformanceformat.com/c95d5c6bacb6f4302a99c78f03a8bbb6/invoke.js"></script>
+    </div>
+
+    <!-- Articles Grid -->
+    <div class="col-md-10 offset-md-1">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            {% for article in articles %}
+            <div class="col">
+                <div class="card h-100 shadow-sm hover-lift border-0 rounded-4 overflow-hidden" style="border-top: 4px solid #0d6efd !important;">
+                    <div class="card-body p-4">
+                        <div class="mb-3">
+                            <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill fw-bold" style="font-size: 0.75rem;">
+                                <i class="fa-solid fa-book-open me-1"></i> Guide #{{ article.id }}
+                            </span>
+                        </div>
+                        <h4 class="card-title fw-bold" style="font-size: 1.15rem; line-height: 1.4;">
+                            <a href="{{ url_for('article_detail', slug=article.slug) }}" class="text-dark text-decoration-none stretched-link">
+                                {{ article.title }}
+                            </a>
+                        </h4>
+                        <p class="card-text text-muted mb-0 mt-2" style="font-size: 0.9rem; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
+                            {{ article.description }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% if articles|length == 0 %}
+            <div class="col-12 text-center py-5">
+                <i class="fa-solid fa-magnifying-glass fa-3x text-muted mb-3 opacity-25"></i>
+                <h4 class="fw-bold text-muted">No articles found</h4>
+                <p class="text-secondary">Try searching for a different keyword or topic.</p>
+                <a href="/articles" class="btn btn-outline-primary rounded-pill btn-sm mt-2">Clear Search</a>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Pagination -->
+        {% if total_pages > 1 %}
+        <nav aria-label="Article navigation" class="mt-5">
+            <ul class="pagination justify-content-center">
+                {% if page > 1 %}
+                <li class="page-item">
+                    <a class="page-link shadow-sm border-0 fw-bold" href="{{ url_for('articles', page=page-1, q=search_query) }}">Previous</a>
+                </li>
+                {% endif %}
+                
+                <li class="page-item active"><span class="page-link shadow-sm border-0 fw-bold bg-primary text-white">Page {{ page }} of {{ total_pages }}</span></li>
+                
+                {% if page < total_pages %}
+                <li class="page-item">
+                    <a class="page-link shadow-sm border-0 fw-bold" href="{{ url_for('articles', page=page+1, q=search_query) }}">Next</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
