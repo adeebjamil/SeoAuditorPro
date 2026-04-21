@@ -24,27 +24,27 @@ def scrape_page(url):
         title_tag = soup.find('title')
         title = title_tag.text.strip() if title_tag else None
         
-        meta_desc_tag = soup.find('meta', attrs={'name': 'description'})
+        meta_desc_tag = soup.find('meta', attrs={'name': re.compile(r'^description$', re.I)})
         meta_desc = meta_desc_tag['content'].strip() if meta_desc_tag and meta_desc_tag.has_attr('content') else None
         
         h1_tags = [h1.text.strip() for h1 in soup.find_all('h1')]
         h2_tags = [h2.text.strip() for h2 in soup.find_all('h2')]
         
         images = soup.find_all('img')
-        images_data = [{'src': img.get('src'), 'alt': img.get('alt', '').strip()} for img in images]
+        images_data = [{'src': img.get('src'), 'alt': img.get('alt', '').strip(), 'has_alt': img.has_attr('alt')} for img in images]
         
         # 2. Technical / Mobility / Security
         is_https = parsed_url.scheme == 'https'
-        has_viewport = bool(soup.find('meta', attrs={'name': 'viewport'}))
-        has_canonical = bool(soup.find('link', rel='canonical'))
+        has_viewport = bool(soup.find('meta', attrs={'name': re.compile(r'^viewport$', re.I)}))
+        has_canonical = bool(soup.find('link', rel=re.compile(r'^canonical$', re.I)))
         
         # 3. Social Tags & Schema
-        og_title = bool(soup.find('meta', property='og:title'))
-        og_desc = bool(soup.find('meta', property='og:description'))
-        og_image = bool(soup.find('meta', property='og:image'))
+        og_title = bool(soup.find('meta', property=re.compile(r'^og:title$', re.I)) or soup.find('meta', attrs={'name': re.compile(r'^og:title$', re.I)}))
+        og_desc = bool(soup.find('meta', property=re.compile(r'^og:description$', re.I)) or soup.find('meta', attrs={'name': re.compile(r'^og:description$', re.I)}))
+        og_image = bool(soup.find('meta', property=re.compile(r'^og:image$', re.I)) or soup.find('meta', attrs={'name': re.compile(r'^og:image$', re.I)}))
         has_og = og_title and og_desc and og_image
         
-        has_schema = len(soup.find_all('script', type='application/ld+json')) > 0
+        has_schema = len(soup.find_all('script', type=re.compile(r'^application/ld\+json$', re.I))) > 0
         
         # 4. Content Depth & Links
         for script in soup(['script', 'style']):
@@ -58,15 +58,23 @@ def scrape_page(url):
         absolute_links = []
         
         for link in links:
-            href = link.get('href', '')
+            href = link.get('href', '').strip()
+            if not href or href.startswith(('mailto:', 'tel:', '#', 'javascript:', 'data:')):
+                continue
+                
             if href.startswith('http'):
                 absolute_links.append(href)
-                if urlparse(href).netloc == parsed_url.netloc:
+                if urlparse(href).netloc.lower() == parsed_url.netloc.lower():
                     internal_links += 1
                 else:
                     external_links += 1
-            elif href.startswith('mailto:') or href.startswith('tel:') or href.startswith('#'):
-                continue
+            elif href.startswith('//'):
+                abs_href = parsed_url.scheme + ':' + href
+                absolute_links.append(abs_href)
+                if urlparse(abs_href).netloc.lower() == parsed_url.netloc.lower():
+                    internal_links += 1
+                else:
+                    external_links += 1
             else:
                 internal_links += 1
                 absolute_links.append(urljoin(base_url, href))
@@ -78,8 +86,12 @@ def scrape_page(url):
         def check_link(l):
             try:
                 r = requests.head(l, headers=headers, timeout=5, allow_redirects=True)
-                if r.status_code >= 400 and r.status_code not in [403, 405]:
-                    return l
+                if r.status_code >= 400:
+                    if r.status_code == 404:
+                        return l
+                    r2 = requests.get(l, headers=headers, timeout=5, stream=True)
+                    if r2.status_code >= 400 and r2.status_code not in [401, 403, 405, 429]:
+                        return l
             except:
                 return l
             return None

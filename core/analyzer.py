@@ -68,11 +68,11 @@ def analyze_seo(data):
 
     # 7. Images
     images = data.get('images', [])
-    missing_alts = [img for img in images if not img.get('alt')]
+    missing_alts = [img for img in images if not img.get('has_alt', True)]
     if missing_alts:
         deduct = int(10 * (len(missing_alts) / max(len(images), 1)))
         score -= deduct
-        suggestions.append({'issue': f"{len(missing_alts)} outside {len(images)} images missing 'alt'.", 'fix': 'Add descriptive alt text to images.'})
+        suggestions.append({'issue': f"{len(missing_alts)} out of {len(images)} images missing 'alt' attribute.", 'fix': 'Add missing alt attribute to images.'})
 
     # 8. Roots
     if not data.get('robots_present'):
