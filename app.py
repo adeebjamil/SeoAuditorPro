@@ -4,11 +4,13 @@ from core.scraper import scrape_page
 from core.analyzer import analyze_seo
 from articles_data import ARTICLES_DB, get_article_by_slug
 from core.out_redirect import bp as out_redirect_bp
+from core.tools import tools_bp
 import os
 
 
 app = Flask(__name__)
 app.register_blueprint(out_redirect_bp)
+app.register_blueprint(tools_bp)
 
 @app.route('/', methods=['GET'])
 def index():

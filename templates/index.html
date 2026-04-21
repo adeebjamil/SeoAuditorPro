@@ -13,13 +13,23 @@
                 Deep-crawl your homepage for technical metrics, meta tag structure, page speed performance, and actionable AI fixes out of 100 points.
             </p>
             
-            <a href="/out?target=seo-guides" class="btn btn-outline-primary btn-lg rounded-pill fw-bold hover-lift shadow-sm d-inline-flex align-items-center px-4 py-2 border-2" style="font-size: 1.05rem;">
-                <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3 shadow-sm" style="width: 32px; height: 32px;">
-                    <i class="fa-solid fa-book-open" style="font-size: 0.8rem;"></i>
-                </div>
-                <span>Free SEO Guides</span>
-                <i class="fa-solid fa-arrow-right-long ms-3 opacity-75"></i>
-            </a>
+            <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-lg-start mb-4">
+                <a href="/out?target=seo-guides" class="btn btn-outline-primary btn-lg rounded-pill fw-bold hover-lift shadow-sm d-inline-flex align-items-center px-4 py-2 border-2" style="font-size: 1.05rem;">
+                    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3 shadow-sm" style="width: 32px; height: 32px;">
+                        <i class="fa-solid fa-book-open" style="font-size: 0.8rem;"></i>
+                    </div>
+                    <span>Free SEO Guides</span>
+                    <i class="fa-solid fa-arrow-right-long ms-3 opacity-75"></i>
+                </a>
+                
+                <a href="{{ url_for('tools.tools_index') }}" class="btn btn-outline-warning btn-lg rounded-pill fw-bold hover-lift shadow-sm d-inline-flex align-items-center px-4 py-2 border-2" style="font-size: 1.05rem; color: #d97706; border-color: #f59e0b;">
+                    <div class="bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center me-3 shadow-sm" style="width: 32px; height: 32px;">
+                        <i class="fa-solid fa-toolbox" style="font-size: 0.8rem;"></i>
+                    </div>
+                    <span class="text-dark">Explore Our Tools</span>
+                    <i class="fa-solid fa-arrow-right-long ms-3 opacity-75 text-dark"></i>
+                </a>
+            </div>
         </div>
         
         <div class="card shadow-lg p-4 p-md-5 mx-auto mx-lg-0" style="max-width: 750px; border-radius: 16px;">
@@ -51,7 +61,7 @@
     </div>
 
     <!-- Right Column: 3D SEO Component -->
-    <div class="col-lg-5 d-none d-lg-flex justify-content-center align-items-center" style="position: relative; z-index: 10; margin-top: 60px;">
+    <div class="col-lg-5 d-none d-lg-flex justify-content-center align-items-center" style="position: relative; z-index: 10; margin-top: 130px;">
         <!-- 3D CSS Rotating SEO Cube -->
         <div style="width: 250px; height: 250px; perspective: 1200px; position: relative;">
             

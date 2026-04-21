@@ -5,22 +5,23 @@
     <title>Redirecting...</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script>
-        // Store fallback URL in sessionStorage
-        sessionStorage.setItem('seo_fallback_url', "{{ fallback_url }}");
-        // Redirect to smartlink after short delay
-        setTimeout(function() {
-            window.location.replace("{{ smart_url }}");
-        }, 800);
-        // On back, redirect to fallback
-        window.addEventListener('pageshow', function(event) {
-            if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
-                var fallback = sessionStorage.getItem('seo_fallback_url');
-                if (fallback) {
-                    sessionStorage.removeItem('seo_fallback_url');
-                    window.location.replace(fallback);
-                }
+        // Check if we just came back from the ad
+        if (sessionStorage.getItem('seo_ad_clicked') === 'true') {
+            var fallback = sessionStorage.getItem('seo_fallback_url');
+            sessionStorage.removeItem('seo_ad_clicked');
+            if (fallback) {
+                window.location.replace(fallback);
+            } else {
+                window.location.replace('/');
             }
-        });
+        } else {
+            // First time landing here: set fallback and redirect to ad
+            sessionStorage.setItem('seo_fallback_url', "{{ fallback_url }}");
+            sessionStorage.setItem('seo_ad_clicked', 'true');
+            setTimeout(function() {
+                window.location.href = "{{ smart_url }}";
+            }, 800);
+        }
     </script>
     <style>
         body { display: flex; align-items: center; justify-content: center; height: 100vh; font-family: sans-serif; background: #f8f9fa; }

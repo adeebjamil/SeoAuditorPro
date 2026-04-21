@@ -1,0 +1,267 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row mb-4 align-items-center">
+    <div class="col-md-8">
+        <h1 class="fw-bolder" style="color: #1e293b;">
+            <i class="fa-solid fa-tags text-primary me-2"></i> Smart Meta Tag Generator
+        </h1>
+        <p class="text-muted fs-5 mb-0">Generate perfectly optimized Title, Description, and Keyword tags instantly.</p>
+    </div>
+    <div class="col-md-4 text-md-end mt-3 mt-md-0">
+        <a href="{{ url_for('tools.tools_index') }}" class="btn btn-outline-secondary rounded-pill px-4">
+            <i class="fa-solid fa-arrow-left me-2"></i> Back to Tools
+        </a>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Input Section -->
+    <div class="col-lg-5">
+        <div class="card shadow-sm border-0 rounded-4 h-100">
+            <div class="card-header bg-white border-bottom-0 pt-4 px-4">
+                <h4 class="mb-0 fw-bold"><i class="fa-solid fa-keyboard text-primary me-2"></i> Enter Details</h4>
+            </div>
+            <div class="card-body p-4">
+                <form id="metaForm" onsubmit="event.preventDefault(); generateMeta();">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-secondary">Primary Keyword <span class="text-danger">*</span></label>
+                        <input type="text" id="pKeyword" class="form-control form-control-lg rounded-3" placeholder="e.g. Plumbing Services" required oninput="generateMeta()">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-secondary">Brand / Company Name</label>
+                        <input type="text" id="brandName" class="form-control form-control-lg rounded-3" placeholder="e.g. Joe's Pipes (Optional)" oninput="generateMeta()">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-secondary">Location (If Local Business)</label>
+                        <input type="text" id="location" class="form-control form-control-lg rounded-3" placeholder="e.g. Chicago, IL (Optional)" oninput="generateMeta()">
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="form-label fw-bold text-secondary">Unique Selling Point (Action)</label>
+                        <select id="usp" class="form-select form-select-lg rounded-3" onchange="generateMeta()">
+                            <option value="">Select a hook (Optional)</option>
+                            <option value="Fast & Reliable">Fast & Reliable</option>
+                            <option value="Affordable & Professional">Affordable & Professional</option>
+                            <option value="The Ultimate Guide to">The Ultimate Guide to</option>
+                            <option value="Award-Winning">Award-Winning</option>
+                            <option value="Top Rated">Top Rated</option>
+                            <option value="Expert">Expert</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-secondary">Secondary Keywords (Comma separated)</label>
+                        <textarea id="secKeywords" class="form-control rounded-3" rows="2" placeholder="e.g. pipe leakage repair, emergency plumber" oninput="generateMeta()"></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-lg w-100 rounded-pill fw-bold shadow-sm d-none">
+                        Generate Now
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Output Section -->
+    <div class="col-lg-7">
+        <div class="card shadow-sm border-0 rounded-4 mb-4">
+            <div class="card-header bg-white border-bottom-0 pt-4 px-4 pb-0 d-flex justify-content-between align-items-center">
+                <h4 class="mb-0 fw-bold"><i class="fa-solid fa-google text-success me-2"></i> Live SERP Preview</h4>
+            </div>
+            <div class="card-body p-4">
+                <div class="p-3 bg-light rounded-3 border" style="font-family: Arial, sans-serif;">
+                    <div class="d-flex align-items-center mb-1">
+                        <div class="bg-secondary rounded-circle me-2" style="width:28px; height:28px; background: url('/static/earth.png') no-repeat center; background-size: cover;"></div>
+                        <div>
+                            <div class="text-dark" style="font-size:14px; line-height: 1.2;">Your Website Name</div>
+                            <div class="text-muted" style="font-size:12px; line-height: 1.2;">https://www.yourdomain.com <i class="fa-solid fa-ellipsis-vertical ms-1"></i></div>
+                        </div>
+                    </div>
+                    <a href="#" id="previewTitle" class="d-block text-primary text-decoration-none fs-5 mb-1" style="color: #1a0dab !important;">Enter your primary keyword to see title...</a>
+                    <div id="previewDesc" class="text-secondary" style="font-size: 14px; color: #4d5156 !important;">Your optimally crafted meta description will appear here as you type your requirements...</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow-sm border-0 rounded-4">
+            <div class="card-header bg-light border-bottom-0 pt-3 px-4 d-flex justify-content-between align-items-center">
+                <h5 class="mb-0 fw-bold text-dark"><i class="fa-solid fa-code me-2"></i> Copy HTML Tags</h5>
+                <button class="btn btn-sm btn-dark rounded-pill shadow-sm px-3" onclick="copyAllTags()">
+                    <i class="fa-regular fa-copy me-1"></i> Copy All
+                </button>
+            </div>
+            <div class="card-body p-4">
+                <!-- Title Result -->
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span class="fw-bold text-secondary">Title Tag</span>
+                        <small id="titleCount" class="fw-semibold">0 / 60 Chars</small>
+                    </div>
+                    <div class="position-relative">
+                        <textarea id="outTitle" class="form-control font-monospace bg-light" rows="1" readonly>&lt;title&gt;&lt;/title&gt;</textarea>
+                        <button class="btn btn-sm btn-outline-secondary position-absolute top-50 end-0 translate-middle-y me-2" onclick="copyField('outTitle')"><i class="fa-solid fa-copy"></i></button>
+                    </div>
+                    <div class="progress mt-2" style="height: 4px;">
+                        <div id="titleBar" class="progress-bar bg-success" role="progressbar" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- Desc Result -->
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span class="fw-bold text-secondary">Meta Description</span>
+                        <small id="descCount" class="fw-semibold">0 / 160 Chars</small>
+                    </div>
+                    <div class="position-relative">
+                        <textarea id="outDesc" class="form-control font-monospace bg-light" rows="2" readonly>&lt;meta name="description" content=""&gt;</textarea>
+                        <button class="btn btn-sm btn-outline-secondary position-absolute top-50 end-0 translate-middle-y me-2" onclick="copyField('outDesc')"><i class="fa-solid fa-copy"></i></button>
+                    </div>
+                    <div class="progress mt-2" style="height: 4px;">
+                        <div id="descBar" class="progress-bar bg-success" role="progressbar" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- Keywords Result -->
+                <div class="mb-2">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span class="fw-bold text-secondary">Meta Keywords</span>
+                    </div>
+                    <div class="position-relative">
+                        <textarea id="outKeys" class="form-control font-monospace bg-light" rows="1" readonly>&lt;meta name="keywords" content=""&gt;</textarea>
+                        <button class="btn btn-sm btn-outline-secondary position-absolute top-50 end-0 translate-middle-y me-2" onclick="copyField('outKeys')"><i class="fa-solid fa-copy"></i></button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toTitleCase(str) {
+        return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+    }
+
+    function generateMeta() {
+        let pKey = document.getElementById('pKeyword').value.trim();
+        let brand = document.getElementById('brandName').value.trim();
+        let loc = document.getElementById('location').value.trim();
+        let usp = document.getElementById('usp').value;
+        let sKeyRaw = document.getElementById('secKeywords').value.trim();
+
+        if(!pKey) {
+            document.getElementById('previewTitle').innerText = "Enter your primary keyword to see title...";
+            document.getElementById('previewDesc').innerText = "Your optimally crafted meta description will appear here as you type your requirements...";
+            updateFields("", "", "");
+            return;
+        }
+
+        pKey = toTitleCase(pKey);
+
+        // Generate Title (Aim for ~50-60 chars)
+        let titleParts = [];
+        if(usp) titleParts.push(usp);
+        titleParts.push(pKey);
+        if(loc) titleParts.push("in " + loc);
+        
+        let titleMain = titleParts.join(" ");
+        let finalTitle = titleMain;
+        
+        if (brand) {
+            if((finalTitle.length + brand.length + 3) <= 65) {
+                finalTitle += " | " + brand;
+            } else {
+                finalTitle += " - " + brand;
+            }
+        }
+
+        // Generate Description (Aim for ~150-160 chars)
+        let desc = `Looking for ${pKey.toLowerCase()}`;
+        if(loc) desc += ` in ${loc}`;
+        desc += `? `;
+        
+        if(brand) desc += `${brand} offers top-quality solutions. `;
+        if(usp) desc += `Experience our ${usp.toLowerCase()} service today. `;
+        
+        if(sKeyRaw) {
+            let skArr = sKeyRaw.split(',').map(s=>s.trim()).filter(s=>s.length>0);
+            if(skArr.length > 0) {
+                desc += `We specialize in ${skArr.slice(0,3).join(', ')}. `;
+            }
+        }
+        desc += "Contact us to learn more!";
+
+        // Keywords string
+        let keysArr = [pKey.toLowerCase()];
+        if(sKeyRaw) {
+            let skArr = sKeyRaw.split(',').map(s=>s.trim().toLowerCase()).filter(s=>s.length>0);
+            keysArr = keysArr.concat(skArr);
+        }
+        let finalKeys = keysArr.join(", ");
+
+        // Update UI
+        document.getElementById('previewTitle').innerText = finalTitle;
+        document.getElementById('previewDesc').innerText = desc;
+
+        updateFields(finalTitle, desc, finalKeys);
+    }
+
+    function updateFields(title, desc, keys) {
+        let tElem = document.getElementById('outTitle');
+        let dElem = document.getElementById('outDesc');
+        let kElem = document.getElementById('outKeys');
+        let tCount = document.getElementById('titleCount');
+        let dCount = document.getElementById('descCount');
+        let tBar = document.getElementById('titleBar');
+        let dBar = document.getElementById('descBar');
+
+        tElem.value = title ? `<title>${title}</title>` : `<title></title>`;
+        dElem.value = desc ? `<meta name="description" content="${desc}">` : `<meta name="description" content="">`;
+        kElem.value = keys ? `<meta name="keywords" content="${keys}">` : `<meta name="keywords" content="">`;
+
+        // Update counts
+        let tl = title.length;
+        tCount.innerText = `${tl} / 60 Chars`;
+        tBar.style.width = Math.min((tl/60)*100, 100) + "%";
+        tBar.className = "progress-bar " + (tl >= 40 && tl <= 65 ? "bg-success" : (tl > 65 ? "bg-danger" : "bg-warning"));
+        if(tl>65) tCount.classList.add('text-danger'); else tCount.classList.remove('text-danger');
+
+        let dl = desc.length;
+        dCount.innerText = `${dl} / 160 Chars`;
+        dBar.style.width = Math.min((dl/160)*100, 100) + "%";
+        dBar.className = "progress-bar " + (dl >= 120 && dl <= 165 ? "bg-success" : (dl > 165 ? "bg-danger" : "bg-warning"));
+        if(dl>165) dCount.classList.add('text-danger'); else dCount.classList.remove('text-danger');
+    }
+
+    function copyField(id) {
+        let el = document.getElementById(id);
+        el.select();
+        document.execCommand('copy');
+        
+        let Toast = Swal.mixin({
+          toast: true, position: 'top-end', showConfirmButton: false, 
+          timer: 2000, timerProgressBar: true
+        });
+        Toast.fire({icon: 'success', title: 'Copied to clipboard'});
+    }
+
+    function copyAllTags() {
+        let t = document.getElementById('outTitle').value;
+        let d = document.getElementById('outDesc').value;
+        let k = document.getElementById('outKeys').value;
+        let all = t + "\n" + d + "\n" + k;
+        navigator.clipboard.writeText(all).then(()=>{
+            let Toast = Swal.mixin({
+              toast: true, position: 'top-end', showConfirmButton: false, 
+              timer: 2000, timerProgressBar: true
+            });
+            Toast.fire({icon: 'success', title: 'All Meta Tags Copied!'});
+        });
+    }
+</script>
+<!-- Assuming SweetAlert2 is used from base.html or we can include it -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{% endblock %}

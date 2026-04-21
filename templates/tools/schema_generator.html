@@ -1,0 +1,248 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row mb-4 align-items-center">
+    <div class="col-md-8">
+        <h1 class="fw-bolder" style="color: #1e293b;">
+            <i class="fa-solid fa-code text-success me-2"></i> Schema Markup Generator
+        </h1>
+        <p class="text-muted fs-5 mb-0">Generate 100% accurate JSON-LD rich snippets for your website.</p>
+    </div>
+    <div class="col-md-4 text-md-end mt-3 mt-md-0">
+        <a href="{{ url_for('tools.tools_index') }}" class="btn btn-outline-secondary rounded-pill px-4">
+            <i class="fa-solid fa-arrow-left me-2"></i> Back to Tools
+        </a>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Input Section -->
+    <div class="col-lg-5">
+        <div class="card shadow-sm border-0 rounded-4 h-100">
+            <div class="card-header bg-white border-bottom-0 pt-4 px-4">
+                <h5 class="mb-0 fw-bold"><i class="fa-solid fa-layer-group text-primary me-2"></i> Select Schema Type</h5>
+                
+                <select id="schemaType" class="form-select form-select-lg rounded-3 mt-3 shadow-sm border-secondary border-opacity-25" onchange="switchSchemaForm()">
+                    <option value="LocalBusiness">Local Business</option>
+                    <option value="Article">Article / Blog Post</option>
+                    <option value="FAQPage">FAQ Page</option>
+                </select>
+            </div>
+            <div class="card-body p-4">
+                
+                <!-- Local Business Form -->
+                <form id="form_LocalBusiness" class="schema-form" oninput="generateSchema()">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-secondary">Business Name <span class="text-danger">*</span></label>
+                        <input type="text" id="lb_name" class="form-control rounded-3" placeholder="e.g. Joe's Plumbing" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-secondary">Image URL</label>
+                        <input type="url" id="lb_image" class="form-control rounded-3" placeholder="https://example.com/logo.png">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-secondary">Website URL <span class="text-danger">*</span></label>
+                        <input type="url" id="lb_url" class="form-control rounded-3" placeholder="https://example.com">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-secondary">Telephone</label>
+                        <input type="tel" id="lb_phone" class="form-control rounded-3" placeholder="+1-555-0198">
+                    </div>
+                    <div class="p-3 bg-light rounded-3 border">
+                        <label class="form-label fw-bold text-secondary mb-2">Address Details</label>
+                        <input type="text" id="lb_street" class="form-control mb-2 rounded-3" placeholder="Street Address">
+                        <input type="text" id="lb_city" class="form-control mb-2 rounded-3" placeholder="City">
+                        <input type="text" id="lb_zip" class="form-control mb-2 rounded-3" placeholder="Zip / Postal Code">
+                        <input type="text" id="lb_country" class="form-control rounded-3" placeholder="Country (e.g. US)">
+                    </div>
+                </form>
+
+                <!-- Article Form -->
+                <form id="form_Article" class="schema-form d-none" oninput="generateSchema()">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-secondary">Article Headline <span class="text-danger">*</span></label>
+                        <input type="text" id="ar_headline" class="form-control rounded-3" placeholder="How to fix a leaky pipe">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-secondary">Article Image URL <span class="text-danger">*</span></label>
+                        <input type="url" id="ar_image" class="form-control rounded-3" placeholder="https://example.com/images/pipe.jpg">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-secondary">Author Name</label>
+                        <input type="text" id="ar_author" class="form-control rounded-3" placeholder="John Doe">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-secondary">Publisher Name (Brand)</label>
+                        <input type="text" id="ar_publisher" class="form-control rounded-3" placeholder="Joe's Pipes Blog">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-secondary">Date Published</label>
+                        <input type="date" id="ar_date" class="form-control rounded-3">
+                    </div>
+                </form>
+
+                <!-- FAQ Form -->
+                <div id="form_FAQPage" class="schema-form d-none">
+                    <p class="text-muted small">Add your frequently asked questions below.</p>
+                    <div id="faqContainer"></div>
+                    <button class="btn btn-sm btn-outline-primary fw-bold rounded-pill w-100" onclick="addFaq()">+ Add Question</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Output Section -->
+    <div class="col-lg-7">
+        <div class="card shadow-sm border-0 rounded-4 h-100">
+            <div class="card-header bg-dark border-bottom-0 pt-3 px-4 d-flex justify-content-between align-items-center rounded-top-4">
+                <h5 class="mb-0 fw-bold text-white"><i class="fa-brands fa-js me-2 text-warning"></i> Generated JSON-LD</h5>
+                <button class="btn btn-sm btn-light rounded-pill shadow-sm px-3 fw-bold text-dark" onclick="copySchema()">
+                    <i class="fa-regular fa-copy me-1"></i> Copy Code
+                </button>
+            </div>
+            <div class="card-body p-0 bg-dark rounded-bottom-4 position-relative">
+                <pre class="m-0 p-4 font-monospace text-success border-0" style="background:#1e1e1e; height: 100%; min-height: 500px; overflow-y: auto; border-radius: 0 0 .5rem .5rem;"><code id="schemaOutput">&lt;!-- Code will appear here --&gt;</code></pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    let faqs = [{q: '', a: ''}];
+
+    function switchSchemaForm() {
+        document.querySelectorAll('.schema-form').forEach(f => f.classList.add('d-none'));
+        let type = document.getElementById('schemaType').value;
+        document.getElementById('form_' + type).classList.remove('d-none');
+        if(type === 'FAQPage' && faqs.length === 1 && !faqs[0].q) {
+            renderFaqs(); // ensure at least one
+        }
+        generateSchema();
+    }
+
+    function addFaq() {
+        faqs.push({q: '', a: ''});
+        renderFaqs();
+        generateSchema();
+    }
+
+    function updateFaq(index, key, val) {
+        faqs[index][key] = val;
+        generateSchema();
+    }
+
+    function renderFaqs() {
+        let h = '';
+        faqs.forEach((faq, i) => {
+            h += `
+            <div class="mb-3 p-3 border rounded-3 bg-light">
+                <label class="fw-bold mb-1">Question ${i+1}</label>
+                <input type="text" class="form-control mb-2" placeholder="e.g. What are your hours?" value="${faq.q}" oninput="updateFaq(${i}, 'q', this.value)">
+                <textarea class="form-control" placeholder="e.g. We are open 24/7." rows="2" oninput="updateFaq(${i}, 'a', this.value)">${faq.a}</textarea>
+            </div>`;
+        });
+        document.getElementById('faqContainer').innerHTML = h;
+    }
+
+    function generateSchema() {
+        let type = document.getElementById('schemaType').value;
+        let schemaObj = {};
+
+        if (type === 'LocalBusiness') {
+            schemaObj = {
+                "@context": "https://schema.org",
+                "@type": "LocalBusiness",
+                "name": document.getElementById('lb_name').value || "Your Business Name",
+                "image": document.getElementById('lb_image').value || undefined,
+                "url": document.getElementById('lb_url').value || undefined,
+                "telephone": document.getElementById('lb_phone').value || undefined,
+                "address": {
+                    "@type": "PostalAddress",
+                    "streetAddress": document.getElementById('lb_street').value || undefined,
+                    "addressLocality": document.getElementById('lb_city').value || undefined,
+                    "postalCode": document.getElementById('lb_zip').value || undefined,
+                    "addressCountry": document.getElementById('lb_country').value || undefined
+                }
+            };
+            // Clean up undefined
+            if(!schemaObj.image) delete schemaObj.image;
+            if(!schemaObj.url) delete schemaObj.url;
+            if(!schemaObj.telephone) delete schemaObj.telephone;
+            let addr = schemaObj.address;
+            if(!addr.streetAddress && !addr.addressLocality && !addr.postalCode && !addr.addressCountry) {
+                delete schemaObj.address;
+            } else {
+                ['streetAddress', 'addressLocality', 'postalCode', 'addressCountry'].forEach(k => { if(!addr[k]) delete addr[k]; });
+            }
+        } 
+        else if (type === 'Article') {
+            schemaObj = {
+                "@context": "https://schema.org",
+                "@type": "Article",
+                "headline": document.getElementById('ar_headline').value || "Headline",
+                "image": [ document.getElementById('ar_image').value ].filter(Boolean),
+                "datePublished": document.getElementById('ar_date').value || undefined,
+                "author": [{
+                    "@type": "Person",
+                    "name": document.getElementById('ar_author').value || undefined
+                }],
+                "publisher": {
+                    "@type": "Organization",
+                    "name": document.getElementById('ar_publisher').value || undefined,
+                    "logo": {
+                        "@type": "ImageObject"
+                    }
+                }
+            };
+            
+            if(schemaObj.image.length === 0) delete schemaObj.image;
+            if(!schemaObj.datePublished) delete schemaObj.datePublished;
+            if(!schemaObj.author[0].name) delete schemaObj.author;
+            if(!schemaObj.publisher.name) delete schemaObj.publisher;
+        }
+        else if (type === 'FAQPage') {
+            let validFaqs = faqs.filter(f => f.q.trim() !== '' && f.a.trim() !== '');
+            schemaObj = {
+                "@context": "https://schema.org",
+                "@type": "FAQPage",
+                "mainEntity": validFaqs.map(f => ({
+                    "@type": "Question",
+                    "name": f.q,
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": f.a
+                    }
+                }))
+            };
+            if(schemaObj.mainEntity.length === 0) {
+                schemaObj.mainEntity = [{
+                    "@type": "Question",
+                    "name": "Your Question Here",
+                    "acceptedAnswer": { "@type": "Answer", "text": "Your Answer Here" }
+                }];
+            }
+        }
+
+        let jsonString = JSON.stringify(schemaObj, null, 4);
+        let finalCode = "&lt;script type=\"application/ld+json\"&gt;\n" + jsonString + "\n&lt;/script&gt;";
+        document.getElementById('schemaOutput').innerHTML = finalCode;
+    }
+
+    function copySchema() {
+        let text = document.getElementById('schemaOutput').innerText;
+        navigator.clipboard.writeText(text).then(()=>{
+            let Toast = Swal.mixin({
+              toast: true, position: 'top-end', showConfirmButton: false, 
+              timer: 2000, timerProgressBar: true
+            });
+            Toast.fire({icon: 'success', title: 'Code Copied to Clipboard!'});
+        });
+    }
+
+    // Initialize
+    document.addEventListener("DOMContentLoaded", function() {
+        switchSchemaForm();
+    });
+</script>
+{% endblock %}
