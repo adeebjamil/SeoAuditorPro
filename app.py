@@ -1,5 +1,4 @@
-
-from flask import Flask, render_template, request, send_from_directory, abort
+from flask import Flask, render_template, request, send_from_directory, abort, make_response
 from core.scraper import scrape_page
 from core.analyzer import analyze_seo
 from articles_data import ARTICLES_DB, get_article_by_slug
@@ -80,6 +79,38 @@ def google_verification():
 @app.route('/ads.txt')
 def ads_txt():
     return send_from_directory('static', 'ads.txt')
+
+@app.route('/sitemap.xml', methods=['GET'])
+def sitemap():
+    base_url = request.url_root.rstrip('/')
+    
+    static_routes = [
+        '/',
+        '/articles',
+        '/tools/',
+        '/tools/meta-generator',
+        '/tools/schema-generator',
+        '/privacy-policy',
+        '/terms-of-service'
+    ]
+    
+    pages = []
+    for route in static_routes:
+        pages.append({
+            'loc': f"{base_url}{route}",
+            'lastmod': '2026-04-21'
+        })
+        
+    for article in ARTICLES_DB:
+        pages.append({
+            'loc': f"{base_url}/article/{article['slug']}",
+            'lastmod': '2026-04-21'
+        })
+        
+    xml_sitemap = render_template('sitemap.xml', pages=pages)
+    response = make_response(xml_sitemap)
+    response.headers["Content-Type"] = "application/xml"
+    return response
 
 @app.route('/analyze', methods=['POST'])
 def analyze():
