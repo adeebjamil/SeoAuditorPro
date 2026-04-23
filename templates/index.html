@@ -38,13 +38,45 @@
                     <span class="input-group-text bg-white border-end-0 text-muted" style="border-top-left-radius: 8px; border-bottom-left-radius: 8px;">
                         <i class="fa-solid fa-globe"></i>
                     </span>
-                    <input type="text" class="form-control border-start-0 ps-0" name="url" placeholder="https://example.com" required style="font-weight: 500;">
-                    <select name="approach" class="form-select border-start-0 border-end-0 bg-light" style="max-width: 140px; font-weight: 600; font-size: 0.95rem; cursor: pointer;">
-                        <option value="static">⚡ Fast Scan</option>
-                        <option value="headless">🤖 Deep (JS)</option>
-                    </select>
-                    <button class="btn btn-primary px-4 fw-bold" type="submit" id="run-btn" style="border-top-right-radius: 8px; border-bottom-right-radius: 8px;">
-                        <i class="fa-solid fa-magnifying-glass me-2"></i>Run Free Audit
+                    <input type="text" class="form-control border-start-0 ps-0" name="url" placeholder="https://example.com" required style="font-weight: 500; min-width: 150px;">
+                    
+                    <!-- Custom Styled Dropdown instead of <select> -->
+                    <button class="btn btn-light dropdown-toggle border-start border-end border-secondary border-opacity-25 bg-white fw-semibold px-3" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: #475569; border-top: 1px solid #dee2e6; border-bottom: 1px solid #dee2e6; border-radius: 0;">
+                        <span id="approach-icon"><i class="fa-solid fa-bolt text-warning"></i></span>
+                        <span id="approach-text" class="ms-1 d-none d-sm-inline">Fast Scan</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-4 mt-2 p-2" style="min-width: 240px; z-index: 1050;">
+                        <li>
+                            <a class="dropdown-item rounded-3 py-2 px-3 mb-1 approach-select active" href="#" data-value="static" data-text="Fast Scan" data-icon="fa-bolt text-warning">
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-warning bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3 flex-shrink-0" style="width: 32px; height: 32px;">
+                                        <i class="fa-solid fa-bolt text-warning"></i>
+                                    </div>
+                                    <div>
+                                        <div class="fw-bold text-dark">Fast Scan</div>
+                                        <div class="text-muted text-wrap" style="font-size: 0.75rem;">Instant HTML check</div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item rounded-3 py-2 px-3 approach-select" href="#" data-value="headless" data-text="Deep Scan" data-icon="fa-robot text-primary">
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3 flex-shrink-0" style="width: 32px; height: 32px;">
+                                        <i class="fa-solid fa-robot text-primary"></i>
+                                    </div>
+                                    <div>
+                                        <div class="fw-bold text-dark">Deep Scan</div>
+                                        <div class="text-muted text-wrap" style="font-size: 0.75rem;">Renders JS / Next.js</div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                    <input type="hidden" name="approach" id="approach-input" value="static">
+                    
+                    <button class="btn btn-primary px-3 px-sm-4 fw-bold" type="submit" id="run-btn" style="border-top-right-radius: 8px; border-bottom-right-radius: 8px;">
+                        <i class="fa-solid fa-magnifying-glass me-1 me-sm-2"></i><span class="d-none d-sm-inline">Run Free Audit</span>
                     </button>
                 </div>
 
@@ -485,6 +517,23 @@
             }
             
         }, 350); // Tick faster
+    });
+
+    // Handle Dropdown UI Update
+    document.querySelectorAll('.approach-select').forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            // Update active state
+            document.querySelectorAll('.approach-select').forEach(el => el.classList.remove('active', 'bg-light'));
+            this.classList.add('active', 'bg-light');
+            
+            // Update button text & icon
+            document.getElementById('approach-text').innerText = this.getAttribute('data-text');
+            document.getElementById('approach-icon').innerHTML = `<i class="fa-solid ${this.getAttribute('data-icon')}"></i>`;
+            
+            // Update hidden input
+            document.getElementById('approach-input').value = this.getAttribute('data-value');
+        });
     });
 </script>
 {% endblock %}
