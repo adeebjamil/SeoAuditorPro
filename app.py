@@ -80,31 +80,48 @@ def google_verification():
 def ads_txt():
     return send_from_directory('static', 'ads.txt')
 
+@app.route('/robots.txt')
+def robots_txt():
+    lines = [
+        "User-agent: *",
+        "Allow: /",
+        f"Sitemap: {request.url_root.rstrip('/')}/sitemap.xml"
+    ]
+    return make_response("\n".join(lines), 200, {'Content-Type': 'text/plain'})
+
 @app.route('/sitemap.xml', methods=['GET'])
 def sitemap():
     base_url = request.url_root.rstrip('/')
     
-    static_routes = [
-        '/',
-        '/articles',
-        '/tools/',
-        '/tools/meta-generator',
-        '/tools/schema-generator',
-        '/privacy-policy',
-        '/terms-of-service'
+    # Define pages with priority and changefreq
+    static_pages = [
+        {'route': '/', 'priority': '1.0', 'changefreq': 'daily'},
+        {'route': '/articles', 'priority': '0.9', 'changefreq': 'daily'},
+        {'route': '/tools/', 'priority': '0.8', 'changefreq': 'weekly'},
+        {'route': '/tools/meta-generator', 'priority': '0.8', 'changefreq': 'weekly'},
+        {'route': '/tools/schema-generator', 'priority': '0.8', 'changefreq': 'weekly'},
+        {'route': '/privacy-policy', 'priority': '0.3', 'changefreq': 'monthly'},
+        {'route': '/terms-of-service', 'priority': '0.3', 'changefreq': 'monthly'}
     ]
     
     pages = []
-    for route in static_routes:
+    from datetime import datetime
+    today = datetime.now().strftime('%Y-%m-%d')
+
+    for p in static_pages:
         pages.append({
-            'loc': f"{base_url}{route}",
-            'lastmod': '2026-04-21'
+            'loc': f"{base_url}{p['route']}",
+            'lastmod': today,
+            'priority': p['priority'],
+            'changefreq': p['changefreq']
         })
         
     for article in ARTICLES_DB:
         pages.append({
             'loc': f"{base_url}/article/{article['slug']}",
-            'lastmod': '2026-04-21'
+            'lastmod': today, # In a real app, this would be the article's updated date
+            'priority': '0.7',
+            'changefreq': 'weekly'
         })
         
     xml_sitemap = render_template('sitemap.xml', pages=pages)
@@ -115,13 +132,14 @@ def sitemap():
 @app.route('/analyze', methods=['POST'])
 def analyze():
     url = request.form.get('url')
+    approach = request.form.get('approach', 'static')
     if not url.startswith(('http://', 'https://')):
         url = 'https://' + url
         
-    scraped_data = scrape_page(url)
+    scraped_data = scrape_page(url, approach)
     report = analyze_seo(scraped_data)
     
-    return render_template('report.html', report=report, url=url)
+    return render_template('report.html', report=report, url=url, approach=approach)
 
 if __name__ == '__main__':
     app.run(debug=True)

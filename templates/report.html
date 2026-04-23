@@ -8,7 +8,10 @@
         <i class="fa-solid fa-arrow-left me-2"></i> New Audit
     </a>
     {% if report.details.status != 'error' %}
-    <button onclick="downloadPDF()" class="btn btn-danger rounded-pill shadow px-4 py-2 text-white d-flex align-items-center gap-2" style="background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%); border:none; transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+    <button onclick="downloadPDF()"
+        class="btn btn-danger rounded-pill shadow px-4 py-2 text-white d-flex align-items-center gap-2"
+        style="background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%); border:none; transition: transform 0.2s, box-shadow 0.2s;"
+        onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
         <i class="fa-solid fa-file-pdf fs-5"></i>
         <span class="fw-bold" style="letter-spacing: 0.3px;">Download PDF Report</span>
     </button>
@@ -16,7 +19,7 @@
 </div>
 
 <div id="report-container" class="p-2">
-{% if report.details.status == 'error' %}
+    {% if report.details.status == 'error' %}
     <div class="alert alert-danger rounded-4 shadow-sm border-0 d-flex align-items-center mb-5" role="alert">
         <i class="fa-solid fa-triangle-exclamation fs-3 me-3 text-danger"></i>
         <div>
@@ -24,24 +27,32 @@
             <p class="mb-0 text-dark opacity-75">{{ report.details.message }}</p>
         </div>
     </div>
-{% else %}
+    {% else %}
     <div class="row">
         <div class="col-md-4 mb-4">
-            <div class="card shadow text-center h-100 border-0 rounded-4" style="background: linear-gradient(to bottom, #ffffff, #f8fafc);">
+            <div class="card shadow text-center h-100 border-0 rounded-4"
+                style="background: linear-gradient(to bottom, #ffffff, #f8fafc);">
                 <div class="card-body d-flex flex-column justify-content-center p-5">
-                    <h5 class="card-title text-uppercase fw-bold text-muted mb-3" style="letter-spacing: 1px; font-size:0.85rem;">
+                    <h5 class="card-title text-uppercase fw-bold text-muted mb-3"
+                        style="letter-spacing: 1px; font-size:0.85rem;">
                         <i class="fa-solid fa-ranking-star text-warning me-1"></i> Technical SEO Score
                     </h5>
-                    
-                    <div class="display-1 fw-bolder mb-2" style="
-                        font-size: 5.5rem;
-                        line-height:1;
-                        {% if report.score >= 80 %} color: #16a34a; 
-                        {% elif report.score >= 50 %} color: #d97706; 
-                        {% else %} color: #dc2626; {% endif %}">
+
+                    {% set score_class = 'score-low' %}
+                    {% if report.score >= 80 %}
+                        {% set score_class = 'score-high' %}
+                    {% elif report.score >= 50 %}
+                        {% set score_class = 'score-medium' %}
+                    {% endif %}
+                    <style>
+                        .score-high { color: #16a34a !important; }
+                        .score-medium { color: #d97706 !important; }
+                        .score-low { color: #dc2626 !important; }
+                    </style>
+                    <div class="display-1 fw-bolder mb-2 {{ score_class }}" style="font-size: 5.5rem; line-height: 1;">
                         {{ report.score }}
                     </div>
-                    
+
                     <p class="text-secondary fw-semibold mb-0" style="letter-spacing: 0.5px;">OUT OF 100</p>
                 </div>
             </div>
@@ -50,49 +61,57 @@
         <div class="col-md-8 mb-4">
             <div class="card shadow-sm h-100">
                 <div class="card-header bg-white border-bottom-0 pb-0">
-                    <h5 class="mb-0 fw-bold" style="color: #1e293b;"><i class="fa-solid fa-list-check me-2 text-primary"></i> Actionable Suggestions</h5>
+                    <h5 class="mb-0 fw-bold" style="color: #1e293b;"><i
+                            class="fa-solid fa-list-check me-2 text-primary"></i> Actionable Suggestions</h5>
                 </div>
                 <div class="card-body pt-3">
                     <ul class="list-group list-group-flush gap-2">
                         {% for suggestion in report.suggestions %}
-                            <li class="list-group-item border rounded-3 bg-light shadow-sm" style="transition: transform 0.2s;">
-                                {% if suggestion.issue != 'None' %}
-                                <div class="d-flex align-items-start mb-2">
-                                    <span class="badge bg-danger rounded-pill px-3 py-2 me-3 shadow-sm d-flex align-items-center gap-1">
-                                        <i class="fa-solid fa-circle-exclamation"></i> Issue
-                                    </span>
-                                    <span class="fw-bold fs-6" style="margin-top: 1px;">{{ suggestion.issue }}</span>
-                                </div>
-                                <div class="d-flex align-items-start">
-                                    <span class="badge bg-success bg-opacity-75 rounded-pill px-3 py-2 me-3 shadow-sm d-flex align-items-center gap-1">
-                                        <i class="fa-solid fa-wrench"></i> Fix Idea
-                                    </span>
-                                    <span class="text-secondary fw-medium" style="margin-top: 1px;">{{ suggestion.fix }}</span>
-                                </div>
-                                {% else %}
-                                <div class="d-flex align-items-start">
-                                    <span class="badge bg-success rounded-pill px-3 py-2 me-3 shadow-sm d-flex align-items-center gap-1">
-                                        <i class="fa-solid fa-star"></i> Perfect
-                                    </span>
-                                    <span class="text-secondary fw-medium" style="margin-top: 1px;">{{ suggestion.fix }}</span>
-                                </div>
-                                {% endif %}
-                            </li>
+                        <li class="list-group-item border rounded-3 bg-light shadow-sm"
+                            style="transition: transform 0.2s;">
+                            {% if suggestion.issue != 'None' %}
+                            <div class="d-flex align-items-start mb-2">
+                                <span
+                                    class="badge bg-danger rounded-pill px-3 py-2 me-3 shadow-sm d-flex align-items-center gap-1">
+                                    <i class="fa-solid fa-circle-exclamation"></i> Issue
+                                </span>
+                                <span class="fw-bold fs-6" style="margin-top: 1px;">{{ suggestion.issue }}</span>
+                            </div>
+                            <div class="d-flex align-items-start">
+                                <span
+                                    class="badge bg-success bg-opacity-75 rounded-pill px-3 py-2 me-3 shadow-sm d-flex align-items-center gap-1">
+                                    <i class="fa-solid fa-wrench"></i> Fix Idea
+                                </span>
+                                <span class="text-secondary fw-medium" style="margin-top: 1px;">{{ suggestion.fix
+                                    }}</span>
+                            </div>
+                            {% else %}
+                            <div class="d-flex align-items-start">
+                                <span
+                                    class="badge bg-success rounded-pill px-3 py-2 me-3 shadow-sm d-flex align-items-center gap-1">
+                                    <i class="fa-solid fa-star"></i> Perfect
+                                </span>
+                                <span class="text-secondary fw-medium" style="margin-top: 1px;">{{ suggestion.fix
+                                    }}</span>
+                            </div>
+                            {% endif %}
+                        </li>
                         {% endfor %}
                     </ul>
                 </div>
             </div>
         </div>
     </div>
-    
+
     <!-- Raw Data Section -->
     <div class="card shadow-sm mb-5 border-0 rounded-4 overflow-hidden">
         <div class="card-header bg-white border-bottom-0 pt-4 px-4 pb-0">
-            <h5 class="mb-0 fw-bold fs-4" style="color: #1e293b;"><i class="fa-solid fa-server me-2 text-primary"></i> Data Overview for <span class="fw-normal text-muted fs-5">{{ url }}</span></h5>
+            <h5 class="mb-0 fw-bold fs-4" style="color: #1e293b;"><i class="fa-solid fa-server me-2 text-primary"></i>
+                Data Overview for <span class="fw-normal text-muted fs-5">{{ url }}</span></h5>
         </div>
         <div class="card-body p-4">
             <div class="row g-4">
-                
+
                 <!-- Content Section -->
                 <div class="col-12 mt-2 mb-1">
                     <h6 class="fw-bold mb-3 d-flex align-items-center" style="color: #475569; letter-spacing:0.5px;">
@@ -101,34 +120,51 @@
                     </h6>
                 </div>
                 <div class="col-md-3">
-                    <span class="d-block text-muted fw-semibold mb-1" style="font-size: 0.85rem;"><i class="fa-solid fa-file-word me-1"></i> Word Count</span> 
-                    <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill fs-6">{{ report.details.word_count }} words</span>
+                    <span class="d-block text-muted fw-semibold mb-1" style="font-size: 0.85rem;"><i
+                            class="fa-solid fa-file-word me-1"></i> Word Count</span>
+                    <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill fs-6">{{
+                        report.details.word_count }} words</span>
                 </div>
                 <div class="col-md-4">
-                    <span class="d-block text-muted fw-semibold mb-1" style="font-size: 0.85rem;"><i class="fa-solid fa-link me-1"></i> Links Summary</span>
+                    <span class="d-block text-muted fw-semibold mb-1" style="font-size: 0.85rem;"><i
+                            class="fa-solid fa-link me-1"></i> Links Summary</span>
                     <div class="d-flex gap-2">
-                        <span class="badge bg-info bg-opacity-25 text-info-emphasis px-3 py-2 rounded-pill fs-6 border border-info border-opacity-25">{{ report.details.internal_links }} Internal</span>
-                        <span class="badge bg-secondary bg-opacity-10 text-secondary px-3 py-2 rounded-pill fs-6 border border-secondary border-opacity-25">{{ report.details.external_links }} External</span>
+                        <span
+                            class="badge bg-info bg-opacity-25 text-info-emphasis px-3 py-2 rounded-pill fs-6 border border-info border-opacity-25">{{
+                            report.details.internal_links }} Internal</span>
+                        <span
+                            class="badge bg-secondary bg-opacity-10 text-secondary px-3 py-2 rounded-pill fs-6 border border-secondary border-opacity-25">{{
+                            report.details.external_links }} External</span>
                     </div>
                 </div>
-                
+
                 <div class="col-md-5">
-                    <span class="d-block text-muted fw-semibold mb-1" style="font-size: 0.85rem;"><i class="fa-solid fa-heart-crack me-1"></i> Broken Links Scan (Sampled)</span>
+                    <span class="d-block text-muted fw-semibold mb-1" style="font-size: 0.85rem;"><i
+                            class="fa-solid fa-heart-crack me-1"></i> Broken Links Scan (Sampled)</span>
                     {% if report.details.broken_links|length > 0 %}
-                        <span class="badge bg-danger px-3 py-2 rounded-pill fs-6 shadow-sm"><i class="fa-solid fa-xmark me-1"></i> {{ report.details.broken_links|length }} Broken Links Found</span>
-                        <div class="text-danger-emphasis mt-2 fw-medium" style="font-size: 13px;">{{ report.details.broken_links[:2]|join(', ') }}</div>
+                    <span class="badge bg-danger px-3 py-2 rounded-pill fs-6 shadow-sm"><i
+                            class="fa-solid fa-xmark me-1"></i> {{ report.details.broken_links|length }} Broken Links
+                        Found</span>
+                    <div class="text-danger-emphasis mt-2 fw-medium" style="font-size: 13px;">{{
+                        report.details.broken_links[:2]|join(', ') }}</div>
                     {% else %}
-                        <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill fs-6 border border-success"><i class="fa-solid fa-check me-1"></i> 0 Broken Links</span>
+                    <span
+                        class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill fs-6 border border-success"><i
+                            class="fa-solid fa-check me-1"></i> 0 Broken Links</span>
                     {% endif %}
                 </div>
-                
+
                 <div class="col-md-6 mt-4">
-                    <span class="d-block text-muted fw-semibold mb-1" style="font-size: 0.85rem;"><i class="fa-solid fa-heading me-1"></i> H1 Tags Count</span> 
-                    <span class="badge bg-dark px-3 py-2 rounded-pill fs-6 shadow-sm">{{ report.details.h1_tags|length }} Tag(s)</span>
+                    <span class="d-block text-muted fw-semibold mb-1" style="font-size: 0.85rem;"><i
+                            class="fa-solid fa-heading me-1"></i> H1 Tags Count</span>
+                    <span class="badge bg-dark px-3 py-2 rounded-pill fs-6 shadow-sm">{{ report.details.h1_tags|length
+                        }} Tag(s)</span>
                 </div>
                 <div class="col-md-6 mt-4">
-                    <span class="d-block text-muted fw-semibold mb-1" style="font-size: 0.85rem;"><i class="fa-regular fa-bookmark me-1"></i> H2 Subheadings Count</span> 
-                    <span class="badge bg-secondary px-3 py-2 rounded-pill fs-6 shadow-sm">{{ report.details.h2_tags|length }} Tag(s)</span>
+                    <span class="d-block text-muted fw-semibold mb-1" style="font-size: 0.85rem;"><i
+                            class="fa-regular fa-bookmark me-1"></i> H2 Subheadings Count</span>
+                    <span class="badge bg-secondary px-3 py-2 rounded-pill fs-6 shadow-sm">{{
+                        report.details.h2_tags|length }} Tag(s)</span>
                 </div>
 
                 <!-- Technical, Performance & Security -->
@@ -139,25 +175,46 @@
                     </h6>
                 </div>
                 <div class="col-md-4">
-                    <span class="d-block text-muted fw-semibold mb-1" style="font-size: 0.85rem;"><i class="fa-solid fa-lock me-1"></i> HTTPS Secure</span>
-                    {% if report.details.is_https %}<span class="text-success fw-bold d-flex align-items-center gap-2"><i class="fa-solid fa-circle-check"></i> Enabled</span>{% else %}<span class="text-danger fw-bold d-flex align-items-center gap-2"><i class="fa-solid fa-circle-xmark"></i> Disabled</span>{% endif %}
+                    <span class="d-block text-muted fw-semibold mb-1" style="font-size: 0.85rem;"><i
+                            class="fa-solid fa-lock me-1"></i> HTTPS Secure</span>
+                    {% if report.details.is_https %}<span
+                        class="text-success fw-bold d-flex align-items-center gap-2"><i
+                            class="fa-solid fa-circle-check"></i> Enabled</span>{% else %}<span
+                        class="text-danger fw-bold d-flex align-items-center gap-2"><i
+                            class="fa-solid fa-circle-xmark"></i> Disabled</span>{% endif %}
                 </div>
                 <div class="col-md-4">
-                    <span class="d-block text-muted fw-semibold mb-1" style="font-size: 0.85rem;"><i class="fa-solid fa-mobile-screen me-1"></i> Mobile Viewport</span>
-                    {% if report.details.has_viewport %}<span class="text-success fw-bold d-flex align-items-center gap-2"><i class="fa-solid fa-circle-check"></i> Present</span>{% else %}<span class="text-danger fw-bold d-flex align-items-center gap-2"><i class="fa-solid fa-circle-xmark"></i> Missing</span>{% endif %}
+                    <span class="d-block text-muted fw-semibold mb-1" style="font-size: 0.85rem;"><i
+                            class="fa-solid fa-mobile-screen me-1"></i> Mobile Viewport</span>
+                    {% if report.details.has_viewport %}<span
+                        class="text-success fw-bold d-flex align-items-center gap-2"><i
+                            class="fa-solid fa-circle-check"></i> Present</span>{% else %}<span
+                        class="text-danger fw-bold d-flex align-items-center gap-2"><i
+                            class="fa-solid fa-circle-xmark"></i> Missing</span>{% endif %}
                 </div>
                 <div class="col-md-4">
-                    <span class="d-block text-muted fw-semibold mb-1" style="font-size: 0.85rem;"><i class="fa-solid fa-tags me-1"></i> Canonical Tag</span>
-                    {% if report.details.has_canonical %}<span class="text-success fw-bold d-flex align-items-center gap-2"><i class="fa-solid fa-circle-check"></i> Present</span>{% else %}<span class="text-danger fw-bold d-flex align-items-center gap-2"><i class="fa-solid fa-circle-xmark"></i> Missing</span>{% endif %}
+                    <span class="d-block text-muted fw-semibold mb-1" style="font-size: 0.85rem;"><i
+                            class="fa-solid fa-tags me-1"></i> Canonical Tag</span>
+                    {% if report.details.has_canonical %}<span
+                        class="text-success fw-bold d-flex align-items-center gap-2"><i
+                            class="fa-solid fa-circle-check"></i> Present</span>{% else %}<span
+                        class="text-danger fw-bold d-flex align-items-center gap-2"><i
+                            class="fa-solid fa-circle-xmark"></i> Missing</span>{% endif %}
                 </div>
-                
+
                 <div class="col-md-4 mt-4">
-                    <span class="d-block text-muted fw-semibold mb-1" style="font-size: 0.85rem;"><i class="fa-solid fa-code me-1"></i> Schema Markup (JSON-LD)</span>
-                    {% if report.details.has_schema %}<span class="badge bg-success px-3 py-2 rounded-pill shadow-sm"><i class="fa-solid fa-check me-1"></i> Found</span>{% else %}<span class="badge bg-danger px-3 py-2 rounded-pill shadow-sm"><i class="fa-solid fa-xmark me-1"></i> Missing</span>{% endif %}
+                    <span class="d-block text-muted fw-semibold mb-1" style="font-size: 0.85rem;"><i
+                            class="fa-solid fa-code me-1"></i> Schema Markup (JSON-LD)</span>
+                    {% if report.details.has_schema %}<span class="badge bg-success px-3 py-2 rounded-pill shadow-sm"><i
+                            class="fa-solid fa-check me-1"></i> Found</span>{% else %}<span
+                        class="badge bg-danger px-3 py-2 rounded-pill shadow-sm"><i class="fa-solid fa-xmark me-1"></i>
+                        Missing</span>{% endif %}
                 </div>
                 <div class="col-md-4 mt-4">
-                    <span class="d-block text-muted fw-semibold mb-1" style="font-size: 0.85rem;"><i class="fa-solid fa-gauge-high me-1"></i> Server Response (TTFB)</span>
-                    <span class="badge px-3 py-2 rounded-pill shadow-sm fs-6 {% if report.details.load_time < 1.5 %}bg-success{% elif report.details.load_time < 3.0 %}bg-warning text-dark{% else %}bg-danger{% endif %}">
+                    <span class="d-block text-muted fw-semibold mb-1" style="font-size: 0.85rem;"><i
+                            class="fa-solid fa-gauge-high me-1"></i> Server Response (TTFB)</span>
+                    <span
+                        class="badge px-3 py-2 rounded-pill shadow-sm fs-6 {% if report.details.load_time < 1.5 %}bg-success{% elif report.details.load_time < 3.0 %}bg-warning text-dark{% else %}bg-danger{% endif %}">
                         <i class="fa-regular fa-clock me-1"></i> {{ "%.2f"|format(report.details.load_time) }} seconds
                     </span>
                 </div>
@@ -170,44 +227,62 @@
                     </h6>
                 </div>
                 <div class="col-md-4">
-                    <span class="d-block text-muted fw-semibold mb-1" style="font-size: 0.85rem;"><i class="fa-regular fa-image me-1"></i> Open Graph (Social)</span> 
-                    {% if report.details.has_og %}<span class="text-success fw-bold"><i class="fa-solid fa-check"></i> Present</span>{% else %}<span class="text-danger fw-bold"><i class="fa-solid fa-xmark"></i> Missing</span>{% endif %}
+                    <span class="d-block text-muted fw-semibold mb-1" style="font-size: 0.85rem;"><i
+                            class="fa-regular fa-image me-1"></i> Open Graph (Social)</span>
+                    {% if report.details.has_og %}<span class="text-success fw-bold"><i class="fa-solid fa-check"></i>
+                        Present</span>{% else %}<span class="text-danger fw-bold"><i class="fa-solid fa-xmark"></i>
+                        Missing</span>{% endif %}
                 </div>
                 <div class="col-md-4">
-                    <span class="d-block text-muted fw-semibold mb-1" style="font-size: 0.85rem;"><i class="fa-solid fa-robot me-1"></i> Robots.txt</span> 
-                    {% if report.details.robots_present %}<span class="text-success fw-bold"><i class="fa-solid fa-check"></i> Found</span>{% else %}<span class="text-danger fw-bold"><i class="fa-solid fa-xmark"></i> Missing</span>{% endif %}
+                    <span class="d-block text-muted fw-semibold mb-1" style="font-size: 0.85rem;"><i
+                            class="fa-solid fa-robot me-1"></i> Robots.txt</span>
+                    {% if report.details.robots_present %}<span class="text-success fw-bold"><i
+                            class="fa-solid fa-check"></i> Found</span>{% else %}<span class="text-danger fw-bold"><i
+                            class="fa-solid fa-xmark"></i> Missing</span>{% endif %}
                 </div>
                 <div class="col-md-4">
-                    <span class="d-block text-muted fw-semibold mb-1" style="font-size: 0.85rem;"><i class="fa-solid fa-sitemap me-1"></i> Sitemap.xml</span> 
-                    {% if report.details.sitemap_present %}<span class="text-success fw-bold"><i class="fa-solid fa-check"></i> Found</span>{% else %}<span class="text-danger fw-bold"><i class="fa-solid fa-xmark"></i> Missing</span>{% endif %}
+                    <span class="d-block text-muted fw-semibold mb-1" style="font-size: 0.85rem;"><i
+                            class="fa-solid fa-sitemap me-1"></i> Sitemap.xml</span>
+                    {% if report.details.sitemap_present %}<span class="text-success fw-bold"><i
+                            class="fa-solid fa-check"></i> Found</span>{% else %}<span class="text-danger fw-bold"><i
+                            class="fa-solid fa-xmark"></i> Missing</span>{% endif %}
                 </div>
             </div>
         </div>
     </div>
 
     <!-- AI Master Prompt Section -->
-    <div class="card shadow-lg mb-5 border-0 rounded-4" style="background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);">
+    <div class="card shadow-lg mb-5 border-0 rounded-4"
+        style="background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);">
         <div class="card-body p-4 p-md-5 text-white">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h4 class="fw-bolder m-0 d-flex align-items-center gap-2" style="text-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <h4 class="fw-bolder m-0 d-flex align-items-center gap-2"
+                    style="text-shadow: 0 2px 4px rgba(0,0,0,0.1);">
                     <i class="fa-solid fa-wand-magic-sparkles text-warning fs-3"></i> AI Fix-It Master Prompt
                 </h4>
-                <button class="btn btn-light bg-white text-info rounded-pill px-4 fw-bold shadow-sm" onclick="navigator.clipboard.writeText(document.getElementById('promptbox').innerText || document.getElementById('promptbox').textContent); this.innerText='Copied!'; setTimeout(()=>this.innerText='Copy Prompt',2000);">
+                <button class="btn btn-light bg-white text-info rounded-pill px-4 fw-bold shadow-sm"
+                    onclick="navigator.clipboard.writeText(document.getElementById('promptbox').innerText || document.getElementById('promptbox').textContent); this.innerText='Copied!'; setTimeout(()=>this.innerText='Copy Prompt',2000);">
                     <i class="fa-regular fa-copy me-1"></i> Copy Prompt
                 </button>
             </div>
-            
-            <p class="mb-4 opacity-75 fw-medium" style="font-size: 1.05rem;">Paste this prompt into ChatGPT, Claude, or Gemini to instantly generate the precise code fixes required for your website.</p>
-            
-            <pre id="promptbox" class="form-control rounded-3 border-0 shadow-sm text-dark p-4 bg-white" style="font-family: monospace; font-size: 0.95rem; opacity:0.95; white-space: pre-wrap; word-wrap: break-word; overflow: visible;">
+
+            <p class="mb-4 opacity-75 fw-medium" style="font-size: 1.05rem;">Paste this prompt into ChatGPT, Claude, or
+                Gemini to instantly generate the precise code fixes required for your website.</p>
+
+            <pre id="promptbox" class="form-control rounded-3 border-0 shadow-sm text-dark p-4 bg-white"
+                style="font-family: monospace; font-size: 0.95rem; opacity:0.95; white-space: pre-wrap; word-wrap: break-word; overflow: visible;">
 Here is the exact list of SEO issues that need to be resolved based on my latest audit:
 {% for suggestion in report.suggestions %}{% if suggestion.issue != 'None' %}
 - ISSUE: {{ suggestion.issue }}
   RECOMMENDED FIX: {{ suggestion.fix }}
 {% endif %}{% endfor %}
 
-Please provide the exact rewritten HTML tags, meta properties, heading structure, and code layout I need to implement to resolve ALL of the above issues. 
-Do not explain too much, just give me the clean, valid HTML output I can paste directly into my site's source code to get a 100/100 SEO score.</pre>
+{% if approach == 'headless' %}
+Since this scan was performed using a Headless JS Engine (indicating the site is likely built with a modern JS framework like Next.js or React), please ensure your code solutions use modern JSX/component-based patterns (e.g., next/head for meta tags, next/image for images) rather than raw HTML.
+{% endif %}
+
+Please provide the exact rewritten {% if approach == 'headless' %}JSX/React code{% else %}HTML tags{% endif %}, meta properties, heading structure, and code layout I need to implement to resolve ALL of the above issues. 
+Do not explain too much, just give me the clean, valid code output I can paste directly into my site to get a 100/100 SEO score.</pre>
         </div>
     </div>
 </div> <!-- End of report container -->
@@ -215,13 +290,13 @@ Do not explain too much, just give me the clean, valid HTML output I can paste d
 <!-- Post-Report Banner Ad -->
 <div class="container text-center mt-5 mb-5" data-html2canvas-ignore="true">
     <script>
-      atOptions = {
-        'key' : 'c95d5c6bacb6f4302a99c78f03a8bbb6',
-        'format' : 'iframe',
-        'height' : 250,
-        'width' : 300,
-        'params' : {}
-      };
+        atOptions = {
+            'key': 'c95d5c6bacb6f4302a99c78f03a8bbb6',
+            'format': 'iframe',
+            'height': 250,
+            'width': 300,
+            'params': {}
+        };
     </script>
     <script src="https://www.highperformanceformat.com/c95d5c6bacb6f4302a99c78f03a8bbb6/invoke.js"></script>
 </div>
@@ -230,13 +305,13 @@ Do not explain too much, just give me the clean, valid HTML output I can paste d
     function downloadPDF() {
         const element = document.getElementById('report-container');
         const opt = {
-            margin:       [0.3, 0.3, 0.3, 0.3],
-            filename:     'SEO_Audit_Report.pdf',
-            image:        { type: 'jpeg', quality: 0.98 },
-            html2canvas:  { scale: 2, useCORS: true },
-            jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+            margin: [0.3, 0.3, 0.3, 0.3],
+            filename: 'SEO_Audit_Report.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2, useCORS: true },
+            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
         };
-        
+
         // Hide the Download button in the PDF by temporarily styling the container, 
         // though our data-html2canvas-ignore usually handles the wrapper.
         html2pdf().set(opt).from(element).save();

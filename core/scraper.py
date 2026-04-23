@@ -5,18 +5,41 @@ import re
 import time
 import concurrent.futures
 
-def scrape_page(url):
+# Playwright optional import for Headless approach
+try:
+    from playwright.sync_api import sync_playwright
+except ImportError:
+    sync_playwright = None
+
+def get_html_headless(url):
+    if not sync_playwright:
+        raise Exception("Playwright is not installed. Please run: pip install playwright && playwright install")
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        page = browser.new_page()
+        page.goto(url, wait_until="networkidle", timeout=20000)
+        html = page.content()
+        browser.close()
+        return html
+
+def scrape_page(url, approach='static'):
     """Fetches the HTML of the page, parses SEO elements, schema, and checks broken links."""
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'}
     
     try:
         # Measure Performance (TTFB / Load Time)
         start_time = time.time()
-        response = requests.get(url, headers=headers, timeout=15)
-        load_time = time.time() - start_time
-        response.raise_for_status()
         
-        soup = BeautifulSoup(response.text, 'lxml')
+        if approach == 'headless':
+            html_content = get_html_headless(url)
+        else:
+            response = requests.get(url, headers=headers, timeout=15)
+            response.raise_for_status()
+            html_content = response.text
+            
+        load_time = time.time() - start_time
+        
+        soup = BeautifulSoup(html_content, 'lxml')
         parsed_url = urlparse(url)
         base_url = f"{parsed_url.scheme}://{parsed_url.netloc}"
         
