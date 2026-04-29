@@ -14,12 +14,27 @@ except ImportError:
 def get_html_headless(url):
     if not sync_playwright:
         raise Exception("Playwright is not installed. Please run: pip install playwright && playwright install")
+    
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
-        page = browser.new_page()
-        page.goto(url, wait_until="networkidle", timeout=20000)
-        html = page.content()
-        browser.close()
+        # Use a real user agent to avoid being blocked
+        context = browser.new_context(
+            user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
+            ignore_https_errors=True
+        )
+        page = context.new_page()
+        try:
+            # Increase timeout and use 'load' instead of 'networkidle' for more reliability
+            page.goto(url, wait_until="load", timeout=45000)
+            # Give it a tiny bit of extra time for dynamic elements
+            page.wait_for_timeout(3000)
+            html = page.content()
+        except Exception as e:
+            html = f"Error during Headless Scan: {str(e)}"
+            # Fallback to static if headless fails? No, better to report the error
+            raise Exception(f"Deep Scan failed to load the page: {str(e)}")
+        finally:
+            browser.close()
         return html
 
 def scrape_page(url, approach='static'):
