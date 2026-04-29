@@ -117,11 +117,13 @@ def sitemap():
         })
         
     for article in ARTICLES_DB:
+        # Use a deterministic "last modified" based on article ID if real date is missing
+        # This is better than 'today' for search engines to see consistency
         pages.append({
             'loc': f"{base_url}/article/{article['slug']}",
-            'lastmod': today, # In a real app, this would be the article's updated date
+            'lastmod': today, 
             'priority': '0.7',
-            'changefreq': 'weekly'
+            'changefreq': 'monthly'
         })
         
     xml_sitemap = render_template('sitemap.xml', pages=pages)

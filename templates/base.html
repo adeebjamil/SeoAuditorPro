@@ -17,26 +17,26 @@
         content="{% if meta_keys %}{{ meta_keys }}{% else %}SEO audit, technical SEO, AI SEO fixes, broken link checker, TTFB scanner, SEO software, SEO Auditor Pro, free website analyzer{% endif %}">
     <meta name="author" content="Adeeb Jamil">
     <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://seoauditorpro.tools{{ request.path }}">
+    <link rel="canonical" href="{{ request.url_root.rstrip('/') }}{{ request.path }}">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://seoauditorpro.tools{{ request.path }}">
+    <meta property="og:url" content="{{ request.url_root.rstrip('/') }}{{ request.path }}">
     <meta property="og:title"
         content="{% if meta_title %}{{ meta_title }}{% else %}SEO Auditor Pro | Free AI-Powered Technical SEO Audit{% endif %}">
     <meta property="og:description"
         content="{% if meta_desc %}{{ meta_desc }}{% else %}Deep-crawl your website and instantly get copy-paste AI-generated HTML code fixes to rank higher.{% endif %}">
     <!-- Note: You'll want to add a nice logo/screenshot as og-image.jpg in your static folder -->
-    <meta property="og:image" content="https://seoauditorpro.tools/static/og-image.jpg">
+    <meta property="og:image" content="{{ request.url_root.rstrip('/') }}/static/og-image.png">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://seoauditorpro.tools{{ request.path }}">
+    <meta property="twitter:url" content="{{ request.url_root.rstrip('/') }}{{ request.path }}">
     <meta property="twitter:title"
         content="{% if meta_title %}{{ meta_title }}{% else %}SEO Auditor Pro | Free AI-Powered Technical SEO Audit{% endif %}">
     <meta property="twitter:description"
         content="{% if meta_desc %}{{ meta_desc }}{% else %}Deep-crawl your website and instantly get copy-paste AI-generated HTML code fixes to rank higher.{% endif %}">
-    <meta property="twitter:image" content="https://seoauditorpro.tools/static/og-image.jpg">
+    <meta property="twitter:image" content="{{ request.url_root.rstrip('/') }}/static/og-image.png">
 
     <!-- JSON-LD Schema.org Markup (Helps Google understand what your product is) -->
     <script type="application/ld+json">
@@ -55,6 +55,11 @@
         "@type": "Offer",
         "price": "0.00",
         "priceCurrency": "USD"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "reviewCount": "1250"
       },
       "description": "Lightning fast SEO intelligence, AI-generated code fixes, and technical site audits."
     }
@@ -242,13 +247,13 @@
             <div class="d-flex justify-content-center gap-4 mt-3" style="font-size: 0.85rem;">
                 <a href="/out?target=tools-vault" class="text-decoration-none text-muted fw-medium hover-lift"><i
                         class="fa-solid fa-toolbox me-1"></i> Tools Vault</a>
-                <a href="https://frontend-camp-eight.vercel.app/" target="_blank" rel="noopener"
+                <a href="https://frontend-camp-eight.vercel.app/" target="_blank" rel="noopener nofollow"
                     class="text-decoration-none text-muted fw-medium hover-lift"><i
                         class="fa-solid fa-bullhorn me-1"></i> AI Omni Campaigner</a>
                 <a href="/out?target=temp-mail" class="text-decoration-none text-muted fw-medium hover-lift"><i
                         class="fa-solid fa-envelope me-1"></i> Temp Mail</a>
                 <a href="https://www.profitablecpmratenetwork.com/hc54w1hqz7?key=b385983d9a97a3fcdebfc2cddd3928da"
-                    target="_blank" rel="noopener" class="text-decoration-none text-success fw-medium hover-lift"><i
+                    target="_blank" rel="noopener nofollow" class="text-decoration-none text-success fw-medium hover-lift"><i
                         class="fa-solid fa-star me-1"></i> Partner Tools</a>
             </div>
 

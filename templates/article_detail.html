@@ -3,6 +3,55 @@
 {% set meta_title = article.title + " | SEO Auditor Pro Guide" %}
 {% set meta_desc = article.description %}
 {% set meta_keys = "seo article, " + article.title.lower().split(' ')[-2:] | join(', ') %}
+    
+<!-- Breadcrumb Schema -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+    "@type": "ListItem",
+    "position": 1,
+    "name": "Home",
+    "item": "{{ request.url_root.rstrip('/') }}/"
+  },{
+    "@type": "ListItem",
+    "position": 2,
+    "name": "Articles",
+    "item": "{{ request.url_root.rstrip('/') }}/articles"
+  },{
+    "@type": "ListItem",
+    "position": 3,
+    "name": "{{ article.title }}",
+    "item": "{{ request.url_root.rstrip('/') }}/article/{{ article.slug }}"
+  }]
+}
+</script>
+
+<!-- Article Schema (AEO/GEO) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "{{ article.title }}",
+  "description": "{{ article.description }}",
+  "author": {
+    "@type": "Person",
+    "name": "Adeeb Jamil"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "SEO Auditor Pro",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "{{ request.url_root.rstrip('/') }}/static/logo.png"
+    }
+  },
+  "datePublished": "2026-01-01",
+  "dateModified": "2026-04-29",
+  "image": "{{ request.url_root.rstrip('/') }}/static/og-image.png"
+}
+</script>
 
 {% block content %}
 <div class="row pt-5 justify-content-center">
@@ -33,6 +82,16 @@
         <p class="lead text-muted border-start border-4 border-primary ps-3" style="font-size: 1.15rem;">
             {{ article.description }}
         </p>
+
+        <!-- GEO: Key Takeaways (Helps AI summarize the page) -->
+        <div class="bg-primary bg-opacity-10 rounded-4 p-4 mt-4 border border-primary border-opacity-10">
+            <h5 class="fw-bold text-primary mb-3"><i class="fa-solid fa-list-check me-2"></i> Key Takeaways</h5>
+            <ul class="mb-0 text-dark opacity-75" style="font-size: 0.95rem;">
+                <li>Understand the core principles of {{ article.title }} for 2026.</li>
+                <li>Implement actionable technical fixes to improve crawler visibility.</li>
+                <li>Monitor performance metrics to ensure long-term growth.</li>
+            </ul>
+        </div>
 
         <!-- Dynamic Content injected safely -->
         <div class="mt-5 article-body" style="font-size: 1.05rem; line-height: 1.8; color: #4a5568;">
