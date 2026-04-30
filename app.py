@@ -85,13 +85,13 @@ def robots_txt():
     lines = [
         "User-agent: *",
         "Allow: /",
-        f"Sitemap: {request.url_root.rstrip('/')}/sitemap.xml"
+        "Sitemap: https://seoauditorpro.tools/sitemap.xml"
     ]
     return make_response("\n".join(lines), 200, {'Content-Type': 'text/plain'})
 
 @app.route('/sitemap.xml', methods=['GET'])
 def sitemap():
-    base_url = request.url_root.rstrip('/')
+    base_url = 'https://seoauditorpro.tools'
     
     # Define pages with priority and changefreq
     static_pages = [
