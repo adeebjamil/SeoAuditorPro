@@ -6,8 +6,8 @@
         {% if page.lastmod %}
         <lastmod>{{ page.lastmod }}</lastmod>
         {% endif %}
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
+        <changefreq>{{ page.changefreq if page.changefreq else 'weekly' }}</changefreq>
+        <priority>{{ page.priority if page.priority else '0.8' }}</priority>
     </url>
     {% endfor %}
 </urlset>

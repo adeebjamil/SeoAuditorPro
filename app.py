@@ -11,6 +11,12 @@ app = Flask(__name__)
 app.register_blueprint(out_redirect_bp)
 app.register_blueprint(tools_bp)
 
+@app.before_request
+def redirect_to_https():
+    if not request.is_secure and os.environ.get('FLASK_ENV') != 'development':
+        url = request.url.replace('http://', 'https://', 1)
+        return make_response("", 301, {'Location': url})
+
 @app.route('/', methods=['GET'])
 def index():
     return render_template('index.html')
@@ -84,7 +90,10 @@ def ads_txt():
 def robots_txt():
     lines = [
         "User-agent: *",
+        "Disallow: /out",
+        "Disallow: /analyze",
         "Allow: /",
+        "",
         "Sitemap: https://seoauditorpro.tools/sitemap.xml"
     ]
     return make_response("\n".join(lines), 200, {'Content-Type': 'text/plain'})

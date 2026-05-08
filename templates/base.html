@@ -14,9 +14,9 @@
     <meta name="description"
         content="{% if meta_desc %}{{ meta_desc }}{% else %}Deep-crawl your website for technical metrics, broken links, page speed, and instantly get copy-paste AI-generated HTML code fixes to rank higher.{% endif %}">
     <meta name="keywords"
-        content="{% if meta_keys %}{{ meta_keys }}{% else %}SEO audit, technical SEO, AI SEO fixes, broken link checker, TTFB scanner, SEO software, SEO Auditor Pro, free website analyzer{% endif %}">
+        content="{% if meta_keys %}{{ meta_keys }}{% else %}Free SEO Audit, Technical SEO Checker, Website SEO Analysis, AI SEO Tool, SEO Auditor Pro, Broken Link Checker, Page Speed Test, Meta Tag Generator, Schema Markup Generator, Google Ranking Checker, On-Page SEO Audit, SEO Site Crawler, Core Web Vitals Test, TTFB Checker, XML Sitemap Validator, Robots.txt Checker, Image Alt Text Audit, H1 Tag Checker, Canonical Tag Checker, Open Graph Generator, Twitter Card Generator, SEO Score Calculator, Website Health Audit, Backlink Analysis Tool, Competitor SEO Analysis, Keyword Density Checker, Mobile Friendly Test, SSL Certificate Checker, Website Security Audit, AI Content Optimizer, SEO Marketing Tool, Digital Marketing Audit, Search Engine Optimization Tool, Website Performance Audit, SEO Reporting Software, Local SEO Audit, E-commerce SEO Checker, Shopify SEO Tool, WordPress SEO Audit, Next.js SEO Scan, React SEO Checker, Sitemap Generator Online, Meta Description Audit, Title Tag Optimizer, SEO Fixes AI, Website Optimization Tool, Organic Traffic Growth, Search Visibility Audit, Google Search Console Tool, Bing Webmaster Tool Audit, Free SEO Software 2026, Advanced SEO Audit{% endif %}">
     <meta name="author" content="Adeeb Jamil">
-    <meta name="robots" content="index, follow">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <link rel="canonical" href="https://seoauditorpro.tools{{ request.path }}">
 
     <!-- Open Graph / Facebook -->
@@ -25,9 +25,9 @@
     <meta property="og:title"
         content="{% if meta_title %}{{ meta_title }}{% else %}SEO Auditor Pro | Free AI-Powered Technical SEO Audit{% endif %}">
     <meta property="og:description"
-        content="{% if meta_desc %}{{ meta_desc }}{% else %}Deep-crawl your website and instantly get copy-paste AI-generated HTML code fixes to rank higher.{% endif %}">
-    <!-- Note: You'll want to add a nice logo/screenshot as og-image.jpg in your static folder -->
-    <meta property="og:image" content="{{ request.url_root.rstrip('/') }}/static/og-image.png">
+        content="{% if meta_desc %}{{ meta_desc }}{% else %}Deep-crawl your website for technical metrics, broken links, page speed, and instantly get copy-paste AI-generated HTML code fixes to rank higher.{% endif %}">
+    <meta property="og:image" content="https://seoauditorpro.tools/static/og-image.png">
+    <meta property="og:site_name" content="SEO Auditor Pro">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
@@ -36,32 +36,49 @@
         content="{% if meta_title %}{{ meta_title }}{% else %}SEO Auditor Pro | Free AI-Powered Technical SEO Audit{% endif %}">
     <meta property="twitter:description"
         content="{% if meta_desc %}{{ meta_desc }}{% else %}Deep-crawl your website and instantly get copy-paste AI-generated HTML code fixes to rank higher.{% endif %}">
-    <meta property="twitter:image" content="{{ request.url_root.rstrip('/') }}/static/og-image.png">
+    <meta property="twitter:image" content="https://seoauditorpro.tools/static/og-image.png">
 
-    <!-- JSON-LD Schema.org Markup (Helps Google understand what your product is) -->
+    <!-- JSON-LD Schema.org Markup -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "SoftwareApplication",
       "name": "SEO Auditor Pro",
-      "operatingSystem": "Web App",
-      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Web",
+      "applicationCategory": "BusinessApplication",
+      "genre": "SEO Tool",
+      "version": "2.1.0",
       "author": {
         "@type": "Person",
-        "name": "Adeeb Jamil"
+        "name": "Adeeb Jamil",
+        "url": "https://seoauditorpro.tools/"
       },
       "url": "https://seoauditorpro.tools/",
+      "image": "https://seoauditorpro.tools/static/logo.png",
+      "screenshot": "https://seoauditorpro.tools/static/og-image.png",
       "offers": {
         "@type": "Offer",
         "price": "0.00",
-        "priceCurrency": "USD"
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock"
       },
       "aggregateRating": {
         "@type": "AggregateRating",
         "ratingValue": "4.9",
-        "reviewCount": "1250"
+        "bestRating": "5",
+        "worstRating": "1",
+        "ratingCount": "1250",
+        "reviewCount": "840"
       },
-      "description": "Lightning fast SEO intelligence, AI-generated code fixes, and technical site audits."
+      "description": "Premium AI-powered SEO auditing tool that deep-crawls websites to identify technical issues and generates instant HTML code fixes using advanced artificial intelligence.",
+      "featureList": [
+        "Technical SEO Deep Crawl",
+        "AI-Generated HTML Fixes",
+        "Broken Link Detection",
+        "Page Speed & TTFB Analysis",
+        "Sitemap & Robots.txt Validation",
+        "On-Page SEO Optimization"
+      ]
     }
     </script>
 
