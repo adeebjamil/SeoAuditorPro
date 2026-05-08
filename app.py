@@ -17,6 +17,10 @@ def redirect_to_https():
         url = request.url.replace('http://', 'https://', 1)
         return make_response("", 301, {'Location': url})
 
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
+
 @app.route('/', methods=['GET'])
 def index():
     return render_template('index.html')
@@ -90,11 +94,24 @@ def ads_txt():
 def robots_txt():
     lines = [
         "User-agent: *",
+        "Allow: /",
         "Disallow: /out",
         "Disallow: /analyze",
-        "Allow: /",
+        "Disallow: /static/google*.html",
         "",
-        "Sitemap: https://seoauditorpro.tools/sitemap.xml"
+        "Sitemap: https://seoauditorpro.tools/sitemap.xml",
+        "Host: https://seoauditorpro.tools"
+    ]
+    return make_response("\n".join(lines), 200, {'Content-Type': 'text/plain'})
+
+@app.route('/.well-known/security.txt')
+def security_txt():
+    lines = [
+        "Contact: mailto:adeeb@seoauditorpro.tools",
+        "Expires: 2027-01-01T00:00:00.000Z",
+        "Acknowledgments: https://seoauditorpro.tools/acknowledgments",
+        "Preferred-Languages: en",
+        "Canonical: https://seoauditorpro.tools/.well-known/security.txt"
     ]
     return make_response("\n".join(lines), 200, {'Content-Type': 'text/plain'})
 

@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% set meta_title = "Page Not Found | SEO Auditor Pro" %}
+
+{% block content %}
+<div class="row align-items-center justify-content-center" style="min-height: 70vh;">
+    <div class="col-md-8 text-center">
+        <div class="mb-5">
+            <!-- 404 Visual -->
+            <div class="display-1 fw-black text-primary opacity-25 mb-0" style="font-size: 10rem; line-height: 1;">404</div>
+            <div class="position-relative" style="margin-top: -4rem;">
+                <h1 class="display-4 fw-bolder mb-3 text-dark">Oops! Page Lost in Crawl</h1>
+                <p class="lead text-muted mx-auto" style="max-width: 550px;">
+                    It seems the page you are looking for has been moved, deleted, or never existed in our index. Don't let your SEO strategy stop here.
+                </p>
+            </div>
+        </div>
+
+        <div class="d-flex flex-wrap gap-3 justify-content-center">
+            <a href="/" class="btn btn-primary btn-lg rounded-pill px-5 py-3 fw-bold shadow-sm hover-lift">
+                <i class="fa-solid fa-home me-2"></i> Back to Homepage
+            </a>
+            <a href="/articles" class="btn btn-outline-secondary btn-lg rounded-pill px-5 py-3 fw-bold hover-lift">
+                <i class="fa-solid fa-book-open me-2"></i> Read SEO Guides
+            </a>
+        </div>
+
+        <!-- Suggestion Cards -->
+        <div class="row g-4 mt-5 text-start">
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm p-4 rounded-4 hover-lift">
+                    <i class="fa-solid fa-magnifying-glass text-primary mb-3 fs-3"></i>
+                    <h6 class="fw-bold mb-2">Audit Site</h6>
+                    <p class="text-muted small mb-0">Run a free technical audit on any URL instantly.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm p-4 rounded-4 hover-lift">
+                    <i class="fa-solid fa-toolbox text-warning mb-3 fs-3"></i>
+                    <h6 class="fw-bold mb-2">Free Tools</h6>
+                    <p class="text-muted small mb-0">Use our Meta and Schema generators for free.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm p-4 rounded-4 hover-lift">
+                    <i class="fa-solid fa-envelope text-success mb-3 fs-3"></i>
+                    <h6 class="fw-bold mb-2">Support</h6>
+                    <p class="text-muted small mb-0">Need help? Contact our team for assistance.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
