@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5 mt-5">
+    <!-- Breadcrumbs for AEO & SEO -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Video Demo</li>
+        </ol>
+    </nav>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-10 text-center">
+            <h1 class="display-4 fw-bolder mb-3" style="color: #0f172a;">SEO Auditor Pro Demo</h1>
+            <p class="lead text-muted mb-5">
+                Watch how our AI-powered SEO crawler analyzes your website and generates actionable code fixes in seconds.
+            </p>
+
+            <!-- Main Video Player -->
+            <div class="ratio ratio-16x9 shadow-lg rounded-4 overflow-hidden mb-5" style="border: 4px solid #e2e8f0; background-color: #000;">
+                <video controls autoplay muted style="width: 100%; height: 100%; object-fit: contain;">
+                    <source src="{{ url_for('static', filename='video.mp4') }}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+
+            <!-- Video Description and Transcript (Good for AEO/GEO) -->
+            <div class="text-start bg-white p-5 rounded-4 shadow-sm border border-light">
+                <h2 class="h3 fw-bold mb-4">About This Video</h2>
+                <p class="text-muted">
+                    In this video, we demonstrate the core capabilities of SEO Auditor Pro. From instant technical SEO checks to deep crawl analytics, you'll see exactly how our platform helps you identify indexing issues, slow page speeds, and missing meta tags.
+                </p>
+                <h3 class="h5 fw-bold mt-4 mb-3">Key Highlights:</h3>
+                <ul class="text-muted mb-4">
+                    <li><strong>Instant Crawl:</strong> Scanning the DOM and server response times (TTFB).</li>
+                    <li><strong>AI Code Fixes:</strong> Generating ready-to-paste HTML to fix critical on-page issues.</li>
+                    <li><strong>Schema & AEO:</strong> Validating structured data to ensure maximum visibility in Generative AI results.</li>
+                </ul>
+                <div class="alert alert-primary d-flex align-items-center" role="alert">
+                    <i class="fa-solid fa-lightbulb fa-2x me-3"></i>
+                    <div>
+                        <strong>Pro Tip:</strong> Search engines love detailed context! Use SEO Auditor Pro's schema generator to add VideoObject markup to your own videos.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- VideoObject Schema for Google Video Indexing -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "VideoObject",
+  "name": "SEO Auditor Pro – Full Platform Demo",
+  "description": "Watch how SEO Auditor Pro deep-crawls your website, identifies technical SEO issues, and generates AI-powered code fixes in seconds.",
+  "thumbnailUrl": "https://seoauditorpro.tools/static/og-image.png",
+  "uploadDate": "2026-05-15T00:00:00+00:00",
+  "contentUrl": "https://seoauditorpro.tools/static/video.mp4",
+  "embedUrl": "https://seoauditorpro.tools/video-demo",
+  "duration": "PT1M30S",
+  "publisher": {
+    "@type": "Organization",
+    "name": "SEO Auditor Pro",
+    "url": "https://seoauditorpro.tools/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://seoauditorpro.tools/static/favicon.ico"
+    }
+  }
+}
+</script>
+{% endblock %}

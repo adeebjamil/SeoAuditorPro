@@ -25,6 +25,13 @@ def page_not_found(e):
 def index():
     return render_template('index.html')
 
+@app.route('/video-demo', methods=['GET'])
+def video_demo():
+    return render_template('video.html', 
+                           meta_title="SEO Auditor Pro Video Demo | Actionable SEO Fixes",
+                           meta_desc="Watch our demo to see how SEO Auditor Pro crawls your site and generates AI-powered technical SEO fixes in seconds.")
+
+
 @app.route('/articles', methods=['GET'])
 def articles():
     search_query = request.args.get('q', '').strip()
@@ -126,6 +133,7 @@ def sitemap():
         {'route': '/tools/', 'priority': '0.8', 'changefreq': 'weekly'},
         {'route': '/tools/meta-generator', 'priority': '0.8', 'changefreq': 'weekly'},
         {'route': '/tools/schema-generator', 'priority': '0.8', 'changefreq': 'weekly'},
+        {'route': '/video-demo', 'priority': '0.8', 'changefreq': 'monthly'},
         {'route': '/privacy-policy', 'priority': '0.3', 'changefreq': 'monthly'},
         {'route': '/terms-of-service', 'priority': '0.3', 'changefreq': 'monthly'}
     ]
